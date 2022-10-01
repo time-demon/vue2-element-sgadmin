@@ -1,32 +1,29 @@
+<!-- 公共模板 -->
 <template>
-  <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
-    <router-view/>
-  </div>
+  <router-view id="app" />
 </template>
 
 <style lang="scss">
+// 标签公共样式自定义
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  text-rendering: optimizeLegibility;
+  color: #333;
 }
 
-nav {
-  padding: 30px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+a {
+  color: inherit;
+}
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+i {
+  color: #333;
 }
 </style>

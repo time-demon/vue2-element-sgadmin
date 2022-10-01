@@ -1,5 +1,6 @@
 {
   "name": "vue2-element-admin-sg",
+  "author": "时光",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,7 +8,11 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "core-js": "^3.8.3",
+    "element-ui": "^2.15.10",
+    "nprogress": "^0.2.0",
+    "screenfull": "^6.0.2",
     "vue": "^2.6.14",
     "vue-router": "^3.5.1",
     "vuex": "^3.6.2"
