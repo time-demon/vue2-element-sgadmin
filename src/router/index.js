@@ -22,7 +22,7 @@ const routes = [
               title: '首页',
               icon: 'sg sg-dashboard',
             },
-            component: () => import(/* webpackChunkName: "后台首页" */ '../components/page'),
+            component: () => import(/* webpackChunkName: "后台首页" */ '../views/page'),
           },
           {
             path: 'about',
@@ -31,7 +31,18 @@ const routes = [
               title: '关于',
               icon: 'sg sg-',
             },
-            component: () => import(/* webpackChunkName: "后台关于" */ '../components/page/about'),
+            component: () => import(/* webpackChunkName: "关于" */ '../views/page/about'),
+            children: [
+              {
+                path: 'about',
+                name: 'about',
+                meta: {
+                  title: '关于1',
+                  icon: 'sg sg-',
+                },
+                component: () => import(/* webpackChunkName: "关于" */ '../views/page/about'),
+              },
+            ]
           },
           {
             path: 'roleManage',
@@ -40,7 +51,7 @@ const routes = [
               title: '角色管理',
               icon: 'sg sg-',
             },
-            component: () => import(/* webpackChunkName: "后台关于" */ '../components/page/roleManage'),
+            component: () => import(/* webpackChunkName: "角色管理" */ '../views/page/roleManage'),
           },
         ]
       },

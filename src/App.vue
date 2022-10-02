@@ -11,6 +11,7 @@
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   color: #333;
+  overflow: hidden;
 }
 
 * {
@@ -21,9 +22,5 @@
 
 a {
   color: inherit;
-}
-
-i {
-  color: #333;
 }
 </style>

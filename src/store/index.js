@@ -9,7 +9,8 @@ export default new Vuex.Store({
     viewSize: {},// 视口尺寸
     siteConfig: {
       title: '',
-    }
+    },
+    routeLabel: [],// 路由标签
   },
   getters: {
   },

@@ -9,10 +9,14 @@ Vue.config.productionTip = false;
 import network from "@/network";
 Vue.prototype.$network = network;
 
-// ElementUI
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
-Vue.use(ElementUI);
+// ElementUI 完整引入
+// import ElementUI from 'element-ui';
+// import 'element-ui/lib/theme-chalk/index.css';
+// Vue.use(ElementUI);
+
+// ElementUI 按需引入
+import { Button, Loading, Breadcrumb, BreadcrumbItem, avatar, drawer, skeleton, SkeletonItem } from 'element-ui';
+Vue.use(Button).use(avatar).use(Loading).use(Breadcrumb).use(BreadcrumbItem).use(drawer).use(skeleton).use(SkeletonItem);
 
 // 计算当前时间
 store.state.nowDate = {

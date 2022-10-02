@@ -13,17 +13,19 @@
         <div class="navbar">
             <!-- 第一级 -->
             <div class="navbar-one-container" v-for="item in navData">
-                <div :class="['navbar-one',item.name == nowRoute?'nowRoute':''] " @click="navBigPath(item)">
+                <div :class="['navbar-one','/'+item.path == nowRoute?'nowRoute':''] " @click="navBigPath(item)"
+                    :title="item.meta.title">
                     <i :class="item.meta.icon"></i><span>{{item.meta.title}}</span>
                 </div>
                 <!-- 第二级 -->
                 <div class="navbar-two-container" v-for="item2 in item.children" :style="'height:'+item.height">
-                    <div :class="['navbar-two',item2.name == nowRoute?'nowRoute':'']" @click="navBigPath(item ,item2)">
+                    <div :class="['navbar-two','/'+item.path+'/'+item2.path == nowRoute?'nowRoute':'']"
+                        @click="navBigPath(item ,item2)">
                         {{item2.meta.title}}
                     </div>
                     <!-- 第三级 -->
                     <div class="navbar-three-container" v-for="item3 in item2.children" :style="'height:'+item2.height">
-                        <div :class="['navbar-three',item3.name == nowRoute?'nowRoute':'']"
+                        <div :class="['navbar-three','/'+item.path+'/'+item2.path+'/'+item3.path == nowRoute?'nowRoute':'']"
                             @click="navBigPath(item ,item2, item3)">
                             {{item3.meta.title}}
                         </div>
@@ -58,14 +60,14 @@ export default {
 
         // 监听当前路由
         $route(newVal, oldVal) {
-            this.nowRoute = newVal.name;
+            this.nowRoute = newVal.fullPath;
         }
 
     },
     mounted() {
 
         // 获取当前路由
-        this.nowRoute = this.$route.name;
+        this.nowRoute = this.$route.fullPath;
 
         // 获取导航栏路由
         let navData = this.$router.options.routes[0].children[0].children;
@@ -102,15 +104,41 @@ export default {
         // 导航多级展开
         navBigPath(item, item2, item3) {
             if (!item2 && !item3) {// 如果是一级导航
-                item.children == undefined || item.children.length == 0 ? this.$router.push('/' + item.path) : item.height = item.height == 0 ? this.navHeight : 0;
+                if (item.children == undefined || item.children.length == 0) {
+                    this.$router.push('/' + item.path);
+
+                    let addrouteLabelData = JSON.parse(JSON.stringify(item));
+                    addrouteLabelData.path = '/' + item.path;
+                    this.addrouteLabel(addrouteLabelData);
+                } else { item.height = item.height == 0 ? this.navHeight : 0 }
             } else if (!item3) {// 如果是二级导航
                 item2.children == undefined || item2.children.length == 0 ? this.$router.push('/' + item.path + '/' + item2.path) : item2.height = item2.height == 0 ? this.navHeight : 0;
+
+                let addrouteLabelData = JSON.parse(JSON.stringify(item2));
+                addrouteLabelData.path = '/' + item.path + '/' + item2.path;
+                this.addrouteLabel(addrouteLabelData);
+
             } else {// 三级导航
                 this.$router.push('/' + item.path + '/' + item2.path + '/' + item3.path);
+
+                let addrouteLabelData = JSON.parse(JSON.stringify(item2));
+                addrouteLabelData.path = '/' + item.path + '/' + item2.path + '/' + item3.path;
+                this.addrouteLabel(addrouteLabelData);
+
             };
         },
 
-    }
+        // 添加到路由标签
+        addrouteLabel(addrouteLabelData) {
+            if (this.$store.state.routeLabel.filter(itemb => itemb.path == addrouteLabelData.path).length == 0) {
+                this.$store.state.routeLabel.push({
+                    title: addrouteLabelData.meta.title,
+                    path: addrouteLabelData.path
+                })
+            };
+        },
+
+    },
 }
 </script>
 

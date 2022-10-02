@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import sidebarVue from '@/components/sidebar.vue';// 侧边栏容器
-import mainVue from '@/components/main.vue';// 右边容器
+import sidebarVue from '@/views/sidebar.vue';// 侧边栏容器
+import mainVue from '@/views/main.vue';// 右边容器
 export default {
     components: {
         sidebarVue,
@@ -15,13 +15,25 @@ export default {
     },
     data() {
         return {
+            loading: true,// 整页loading
             sidebarState: 'open',// 侧边栏控制：open展开，close关闭，fold折叠
         }
     },
     mounted() {
+
+        // 设置默认的路由标签
+        let routeLabel = [
+            {
+                title: this.$route.meta.title,
+                path: this.$route.fullPath
+            }
+        ];
+        this.$store.state.routeLabel = routeLabel;
+
         if (window.innerWidth < 750) {
             this.sidebarState = 'close';
         };
+
     },
 }
 </script>
