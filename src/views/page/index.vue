@@ -1,7 +1,18 @@
 <template>
     <div>
-        首页
-        <input />
-        <el-button type="success">成功按钮</el-button>
+
+        <helloVue />
+
     </div>
 </template>
+
+<script>
+import helloVue from "@/components/home/hello.vue"
+export default {
+    components: {
+        helloVue
+    },
+    methods: {
+    }
+}
+</script>

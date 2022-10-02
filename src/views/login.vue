@@ -69,6 +69,24 @@ export default {
     },
     mounted() {
 
+        if (localStorage.getItem('token')) {
+            // this.$alert('会话已失效，2秒后重新登录...', '温馨提示', {
+            //     confirmButtonText: '确定',
+            //     showConfirmButton: false,
+            //     showClose: false,
+            //     closeOnClickModal: false,
+            // });
+            this.$alert('您已登录，是否访问首页？', '温馨提示', {
+                confirmButtonText: '确定',
+                showClose: false,
+                closeOnClickModal: false,
+                duration: 100,
+                callback: action => {
+                    this.$router.push('/')
+                }
+            });
+        }
+
         // 默认主题，false为亮色，true为暗黑色
         this.themeState = true;
 
@@ -101,7 +119,7 @@ export default {
                 if (this.remember) {
                     localStorage.setItem('remeber', JSON.stringify({ account: form.account, password: window.btoa(form.password) }))
                 } else {
-                    localStorage.clear();
+                    localStorage.removeItem('remeber');
                 }
                 this.submitNetwork();
             }
@@ -146,38 +164,43 @@ export default {
             this.$network({
                 url: `adminLogin?account=${form.account}&password=${form.password}`,
             }).then((res) => {
-                if (res.code == 200) {
+                if (res.code == 200) {// 登录成功
+                    localStorage.setItem("token", res.token);
                     this.$message({
                         message: '登录成功，正在跳转...',
                         type: 'success',
-                        duration: 1500
+                        duration: 1000
                     });
                     setTimeout(() => {
                         this.loading = false;
-                        this.$router.push('/')
-                    }, 1500)
-                } else if (res.code == -2) {
-                    this.$message({
-                        message: '密码错误，请重新输入...',
-                        type: 'error',
-                        duration: 2500
-                    });
-                } else if (res.code == -1) {
+                        this.$router.push('/');
+                    }, 300)
+                    return
+                } else if (res.code == -1) {// 账号不存在
                     this.$message({
                         message: '账号不存在，请重新输入...',
                         type: 'error',
-                        duration: 2500
+                        duration: 1000
                     });
+                    this.form.account = '';
+                    this.form.password = '';
+                } else if (res.code == -2) {// 密码错误
+                    this.$message({
+                        message: '密码错误，请重新输入...',
+                        type: 'error',
+                        duration: 1000
+                    });
+                    this.form.password = '';
                 } else {
                     this.$message({
                         message: '未知原因...',
                         type: 'error',
-                        duration: 2500
+                        duration: 1000
                     });
                 }
                 setTimeout(() => {
                     this.loading = false;
-                }, 1500)
+                }, 300)
             })
         }
 

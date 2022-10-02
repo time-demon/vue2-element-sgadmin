@@ -20,7 +20,7 @@
                             :title="item.title" @click="rightOpenClick(index)">
                         </div>
                         <div :class="['tools-control hover sg ',screenfullState?'sg-fullscreen-exit':'sg-fullscreen-open']"
-                            v-if="screenfullButState" :title="screenfullState?'退出全屏':'全屏'" @click="fullScreen">
+                            v-show="screenfullButState" :title="screenfullState?'退出全屏':'全屏'" @click="fullScreen">
                         </div>
                     </div>
                     <div class="tools-right-control hover avatar">
@@ -33,7 +33,7 @@
                             <li class="avatar-tool" @click="sideSettings = true">
                                 <i class="el-icon-setting"></i> 布局设置
                             </li>
-                            <li class="avatar-tool">
+                            <li class="avatar-tool" @click="signOut">
                                 <i class="el-icon-switch-button"></i> 退出登录
                             </li>
                         </ul>
@@ -109,6 +109,7 @@ export default {
 
     },
     mounted() {
+        console.log(localStorage);
         setTimeout(() => {
             this.loading = false;
         }, 300)
@@ -169,6 +170,21 @@ export default {
             screenfull.exit();
             this.screenfullState = !this.screenfullState;
         },
+
+        // 退出登录
+        signOut() {
+            this.$confirm('确定要退出系统么？', '温馨提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+                closeOnClickModal: false,
+                showClose: false,
+            }).then(() => {
+                localStorage.clear();
+                this.$router.push('/login')
+            }).catch(() => {
+            });
+        }
 
     }
 }
@@ -287,7 +303,7 @@ export default {
     }
 
     >.appPage-container {
-        min-height: calc(100vh - 50px);
+        min-height: calc(100vh - 85px);
         padding: 10px;
     }
 }
