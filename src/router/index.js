@@ -93,6 +93,13 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+// : [
+//   {
+//     path: '/:catchAll(.*)',
+//     component: () => import(/* webpackChunkName: "关于" */ '../views/page/about'),
+//     name: 'NotFound'
+//   }
+// ]
 
 // 导航守卫
 router.beforeEach((to, from, next) => {
