@@ -1,16 +1,16 @@
 <template>
     <div>
 
-        <helloVue />
+        <templateInforVue style="width: 50%;" />
 
     </div>
 </template>
 
 <script>
-import helloVue from "@/components/home/hello.vue"
+import templateInforVue from "@/components/home/templateInfor.vue";
 export default {
     components: {
-        helloVue
+        templateInforVue
     },
     methods: {
     }

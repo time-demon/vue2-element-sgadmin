@@ -28,10 +28,10 @@ p {
   font-size: 13px;
 }
 
-// .el-card__header {
-//   padding: 10px 14px;
-//   font-size: 14px;
-// }
+.el-card__header {
+  padding: 10px 14px;
+  font-size: 14px;
+}
 
 .el-message {
   max-width: 95vw;

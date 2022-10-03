@@ -17,13 +17,13 @@
                 <el-form ref="form" :model="form" label-width="80px">
                     <div class="input">
                         <el-input size="small" v-model="form.account" clearable prefix-icon="el-icon-user-solid"
-                            placeholder="账号..." @input="input"></el-input>
+                            placeholder="账号..." @input="inputDetection"></el-input>
                         <div class="tip"><i :class="accountTip==''?'':'el-icon-warning-outline'"></i> {{accountTip}}
                         </div>
                     </div>
                     <div class="input">
                         <el-input size="small" v-model="form.password" clearable prefix-icon="el-icon-lock"
-                            show-password placeholder="密码..." @input="input">
+                            show-password placeholder="密码..." @input="inputDetection">
                         </el-input>
                         <div class="tip"><i :class="passwordTip==''?'':'el-icon-warning-outline'"></i> {{passwordTip}}
                         </div>
@@ -69,29 +69,17 @@ export default {
     },
     mounted() {
 
-        if (localStorage.getItem('token')) {
-            // this.$alert('会话已失效，2秒后重新登录...', '温馨提示', {
-            //     confirmButtonText: '确定',
-            //     showConfirmButton: false,
-            //     showClose: false,
-            //     closeOnClickModal: false,
-            // });
-            this.$alert('您已登录，是否访问首页？', '温馨提示', {
-                confirmButtonText: '确定',
-                showClose: false,
-                closeOnClickModal: false,
-                duration: 100,
-                callback: action => {
-                    this.$router.push('/')
-                }
-            });
-        }
+        // 监听视口尺寸
+        this.innerWidth = window.innerWidth;
+        window.onresize = () => {
+            this.innerWidth = window.innerWidth;
+        };
+
+        // 获取当前域名
+        this.host = window.location.host;
 
         // 默认主题，false为亮色，true为暗黑色
         this.themeState = true;
-
-        // 获取域名
-        this.host = window.location.host;
 
         // 检测是否有保存的账号和密码
         if (localStorage.getItem('remeber') != null) {
@@ -100,65 +88,13 @@ export default {
                 password: window.atob(JSON.parse(localStorage.getItem('remeber')).password),
             };
             this.remember = true;
-        }
-
-        // 监测视口尺寸
-        this.innerWidth = window.innerWidth;
-        window.onresize = () => {
-            this.innerWidth = window.innerWidth;
         };
 
     },
     methods: {
 
-        // 提交按钮
-        submit() {// 提交
-            let { form } = this;
-            if (this.ifNull()) {
-                // 检测是否记住密码
-                if (this.remember) {
-                    localStorage.setItem('remeber', JSON.stringify({ account: form.account, password: window.btoa(form.password) }))
-                } else {
-                    localStorage.removeItem('remeber');
-                }
-                this.submitNetwork();
-            }
-        },
-        // 输入
-        input() {
-            this.ifNull();
-        },
-        // 输入时检测
-        ifNull() {
-            let state = false;
-            let { form } = this;
-            if (form.account == '' && form.password == '') {
-                this.accountTip = '账号为空';
-                this.passwordTip = '密码为空';
-            } else if (form.account == '') {
-                this.accountTip = '账号为空';
-                this.passwordTip = '';
-            } else if (form.password == '') {
-                this.accountTip = '';
-                this.passwordTip = '密码为空';
-            } else {
-                this.accountTip = '';
-                this.passwordTip = '';
-                state = true;
-            }
-            if (/[\u4E00-\u9FA5 ]/g.test(form.account)) {
-                this.accountTip = '账号不能有中文和空格';
-                form.account = form.account.replace(/[\u4E00-\u9FA5 ]/g, '');
-                setTimeout(() => {
-                    this.accountTip = '';
-                }, 1000);
-                state = false;
-            }
-            return state
-        },
-
-        // 请求验证
-        submitNetwork() {
+        // 请求验证(登录注册网络请求写在这)
+        reqVeri() {
             let { form } = this;
             this.loading = true;
             this.$network({
@@ -202,7 +138,53 @@ export default {
                     this.loading = false;
                 }, 300)
             })
-        }
+        },
+
+        // 提交按钮
+        submit() {// 提交
+            let { form } = this;
+            if (this.conditionDetection()) {
+                // 检测是否记住密码
+                if (this.remember) {
+                    localStorage.setItem('remeber', JSON.stringify({ account: form.account, password: window.btoa(form.password) }))
+                } else {
+                    localStorage.removeItem('remeber');
+                }
+                this.reqVeri();
+            }
+        },
+        // 输入检测
+        inputDetection() {
+            this.conditionDetection();
+        },
+        // 条件检测
+        conditionDetection() {
+            let state = false;
+            let { form } = this;
+            if (form.account == '' && form.password == '') {
+                this.accountTip = '账号为空';
+                this.passwordTip = '密码为空';
+            } else if (form.account == '') {
+                this.accountTip = '账号为空';
+                this.passwordTip = '';
+            } else if (form.password == '') {
+                this.accountTip = '';
+                this.passwordTip = '密码为空';
+            } else {
+                this.accountTip = '';
+                this.passwordTip = '';
+                state = true;
+            }
+            if (/[\u4E00-\u9FA5 ]/g.test(form.account)) {
+                this.accountTip = '账号不能有中文和空格';
+                form.account = form.account.replace(/[\u4E00-\u9FA5 ]/g, '');
+                setTimeout(() => {
+                    this.accountTip = '';
+                }, 1000);
+                state = false;
+            }
+            return state
+        },
 
     },
 }

@@ -15,8 +15,8 @@ Vue.prototype.$network = network;
 // Vue.use(ElementUI);
 
 // ElementUI 按需引入
-import { Button, Loading, Breadcrumb, BreadcrumbItem, avatar, drawer, skeleton, SkeletonItem, card, tag, Switch, Form, Input, Checkbox, Message, MessageBox, Alert } from 'element-ui';
-Vue.use(Button).use(avatar).use(Loading).use(Breadcrumb).use(BreadcrumbItem).use(drawer).use(skeleton).use(SkeletonItem).use(card).use(tag).use(Switch).use(Form).use(Input).use(Checkbox).use(Alert);
+import { Link, Col, Row, Collapse, CollapseItem, Button, Loading, Breadcrumb, BreadcrumbItem, avatar, drawer, skeleton, SkeletonItem, card, tag, Switch, Form, Input, Checkbox, Message, MessageBox, Alert } from 'element-ui';
+Vue.use(Link).use(Col).use(Row).use(Collapse).use(CollapseItem).use(Button).use(avatar).use(Loading).use(Breadcrumb).use(BreadcrumbItem).use(drawer).use(skeleton).use(SkeletonItem).use(card).use(tag).use(Switch).use(Form).use(Input).use(Checkbox).use(Alert);
 Vue.prototype.$message = Message;
 Vue.prototype.$alert = MessageBox.alert;
 Vue.prototype.$confirm = MessageBox.confirm;

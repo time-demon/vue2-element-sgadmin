@@ -109,7 +109,6 @@ export default {
 
     },
     mounted() {
-        console.log(localStorage);
         setTimeout(() => {
             this.loading = false;
         }, 300)

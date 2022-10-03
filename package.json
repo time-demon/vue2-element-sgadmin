@@ -3,6 +3,7 @@
   "author": "时光",
   "version": "1.0.2",
   "private": true,
+  "github": "https://gitee.com/time-demon/vue2-element-admin-sg",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build"
@@ -12,6 +13,7 @@
     "core-js": "^3.8.3",
     "element-ui": "^2.15.10",
     "nprogress": "^0.2.0",
+    "path": "^0.12.7",
     "screenfull": "^6.0.2",
     "vue": "^2.6.14",
     "vue-router": "^3.5.1",

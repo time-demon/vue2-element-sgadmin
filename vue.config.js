@@ -2,6 +2,11 @@ const { defineConfig } = require('@vue/cli-service')
 const TerserPlugin = require("terser-webpack-plugin");
 const CompressionWebpackPlugin = require('compression-webpack-plugin');// gzip压缩
 
+//加载path模块
+const path = require('path')
+//定义resolve方法，把相对路径转换成绝对路径
+const resolve = dir => path.join(__dirname, dir)
+
 module.exports = defineConfig({
   transpileDependencies: true,
   productionSourceMap: false, //去除生产环境的 productionSourceMap
@@ -49,6 +54,12 @@ module.exports = defineConfig({
         })
       ],
     }
+  },
+  chainWebpack: config => {
+    // 添加别名
+    config.resolve.alias
+      .set('@', resolve('src'))
+      .set('#', resolve('./'))// 根目录
   },
   outputDir: 'dist', // 打包后文件的目录 （默认为dist）
   assetsDir: 'static', //  outputDir的静态资源(js、css、img、fonts)目录  默认为‘’没有单独目录js/css/img在根目录中。

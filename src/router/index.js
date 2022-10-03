@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import network from "@/network";
 import store from '@/store'
 
+import { MessageBox } from 'element-ui'
+
 // 路由
 Vue.use(VueRouter)
 const routes = [
@@ -87,6 +89,10 @@ VueRouter.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err);
 };
 
+// 网页加载进度条
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+
 // 路由信息
 const router = new VueRouter({
   mode: 'history',
@@ -101,9 +107,36 @@ const router = new VueRouter({
 //   }
 // ]
 
-// 导航守卫
+// 导航守卫 · 前
 router.beforeEach((to, from, next) => {
-  NProgress.start();
+  NProgress.start();// 开启网页加载进度条
+
+  // 路由访问时判断是否登录
+  if (to.fullPath == '/login') {// 排除页面
+    if (localStorage.getItem('token') != null) {
+      MessageBox.alert('您已登录，是否访问首页？', '温馨提示', {
+        confirmButtonText: '确定',
+        showClose: false,
+        closeOnClickModal: false,
+        duration: 100,
+        callback: action => {
+          next('/');
+        }
+      });
+    }
+  } else if (localStorage.getItem('token') == null) {// 如果访问的是其它路由而且token不存在，即为未登录
+    localStorage.clear();
+    MessageBox.alert('暂未登录，是否跳转登录？', '温馨提示', {
+      confirmButtonText: '确定',
+      showClose: false,
+      closeOnClickModal: false,
+      callback: action => {
+        next('/login');
+      }
+    });
+    return
+  }
+
   // 通过云端设置网站名称
   network({
     url: '/cloudGet'
@@ -119,12 +152,9 @@ router.beforeEach((to, from, next) => {
   next();
 });
 
-// 页面加载上方进度条
-import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
-
+// 导航守卫 · 后
 router.afterEach((to, from) => {
-  NProgress.done();
+  NProgress.done();// 结束网页加载进度条
 })
 
 export default router
