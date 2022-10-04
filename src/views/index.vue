@@ -1,19 +1,18 @@
+<!-- 后台首页布局 -->
 <template>
     <div class="page-container">
-        <slot name="lrTools"></slot>
-        <sidebarVue :sidebarState="sidebarState" />
-        <mainVue :sidebarState="sidebarState" />
+        <leftSidebarVue :sidebarState="sidebarState" />
+        <rightContainerVue :sidebarState="sidebarState" />
+        <lrToolsVue />
     </div>
 </template>
 
 <script>
-import sidebarVue from '@/views/sidebar.vue';// 侧边栏容器
-import mainVue from '@/views/main.vue';// 右边容器
+import leftSidebarVue from '@/components/leftSidebar.vue';// 侧边栏容器
+import rightContainerVue from '@/components/rightContainer.vue';// 右边容器
+import lrToolsVue from '@/components/default/lrTools.vue';// 右小角悬浮工具
 export default {
-    components: {
-        sidebarVue,
-        mainVue,
-    },
+    components: { leftSidebarVue, rightContainerVue, lrToolsVue },
     data() {
         return {
             loading: true,// 整页loading

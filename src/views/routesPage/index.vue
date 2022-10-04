@@ -1,3 +1,4 @@
+<!-- 后台首页 -->
 <template>
     <div>
         <div class="default_container mobileBlock">
@@ -18,8 +19,6 @@ import csdnVue from "@/components/home/csdn.vue";
 import myProjectVue from "@/components/home/myProject.vue";
 export default {
     components: { templateInforVue, csdnVue, myProjectVue },
-    methods: {
-    },
 }
 </script>
 

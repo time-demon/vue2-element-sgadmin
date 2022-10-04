@@ -1,9 +1,8 @@
 <template>
-    <cardVue v-loading="loading" title="我的CSDN文章(自动更新，仅最新三篇)" :titleShow="true" shadow="nerver" style="color:#676a6c">
+    <cardVue v-loading="loading" title="我的CSDN文章(自动更新，仅最新三篇)" :titleShow="true" shadow="nerver">
         <template v-slot:aa>
             <el-collapse v-model="activeNames">
-                <el-collapse-item v-for="(item,index) in articleData" :title="index+1+'. '+item.title"
-                    :name="item.title">
+                <el-collapse-item v-for="(item,index) in articleData" :title="index+1+'. '+item.title" :name="index">
                     <el-row>
                         <el-col :span="12">
                             <div class="grid-content bg-purple">发布时间：{{item.postTime}}</div>
@@ -24,13 +23,11 @@
 <script>
 import cardVue from '@/components/default/card.vue';
 export default {
-    components: {
-        cardVue,
-    },
+    components: { cardVue, },
     data() {
         return {
             loading: true,
-            activeNames: [1],
+            activeNames: [0],// 需要默认打开的
             articleData: [],// 文章数据
         }
     },
@@ -38,10 +35,10 @@ export default {
         this.$network({
             url: "csdn/community/home-api/v1/get-business-list?businessType=blog&username=qq_19322833"
         }).then(res => {
-            for (let i = 0; i < 3; i++) {
-                this.articleData.push(res.data.list[i])
+            if (res.code == 200 && res.message == "success") {
+                this.articleData = res.data.list.filter((item, index) => index < 3);
+                this.loading = false;
             }
-            this.loading = false;
         });
     },
 }

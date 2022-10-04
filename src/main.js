@@ -3,16 +3,18 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+Vue.config.productionTip = false;
+
 // 全局主题样式
 import './assets/theme/theme.min.css'
 
-// css默认样式重置器
-import 'normalize.css'
+// css默认样式重置文件
+import '@/assets/css/normalize/normalize.min.css'
 
+// ElemnetUI样式重置文件
+import '@/assets/css/element/reset.min.css'
 
-Vue.config.productionTip = false;
-
-// 网络请求
+// 挂载网络请求
 import network from "@/network";
 Vue.prototype.$network = network;
 
@@ -27,18 +29,6 @@ Vue.use(Tooltip).use(Link).use(Col).use(Row).use(Collapse).use(CollapseItem).use
 Vue.prototype.$message = Message;
 Vue.prototype.$alert = MessageBox.alert;
 Vue.prototype.$confirm = MessageBox.confirm;
-
-// 计算当前时间
-store.state.nowDate = {
-  time: new Date().getTime(),// 时间戳
-  year: new Date().getFullYear(),// 年
-  month: new Date().getMonth() + 1,// 月
-  date: new Date().getDate(),// 日
-  week: new Date().getDay(),// 星期
-  hours: new Date().getHours(),// 小时
-  minutes: new Date().getMinutes(),// 分钟
-  seconds: new Date().getSeconds(),// 秒数
-};
 
 new Vue({
   network,

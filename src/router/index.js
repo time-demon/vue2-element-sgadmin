@@ -1,9 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import network from "@/network";
+import network from "@/network"
 import store from '@/store'
-
-import { MessageBox } from 'element-ui'
 
 // 路由
 Vue.use(VueRouter)
@@ -24,7 +22,7 @@ const routes = [
               title: '首页',
               icon: 'sg sg-dashboard',
             },
-            component: () => import(/* webpackChunkName: "后台首页" */ '../views/page'),
+            component: () => import(/* webpackChunkName: "后台首页" */ '../views/routesPage'),
           },
           {
             path: 'about',
@@ -33,7 +31,7 @@ const routes = [
               title: '关于',
               icon: 'sg sg-',
             },
-            component: () => import(/* webpackChunkName: "关于" */ '../views/page/about'),
+            component: () => import(/* webpackChunkName: "关于" */ '../views/routesPage/about'),
             children: [
               {
                 path: 'about',
@@ -42,7 +40,7 @@ const routes = [
                   title: '关于1',
                   icon: 'sg sg-',
                 },
-                component: () => import(/* webpackChunkName: "关于" */ '../views/page/about'),
+                component: () => import(/* webpackChunkName: "关于" */ '../views/routesPage/about'),
               },
             ]
           },
@@ -53,7 +51,7 @@ const routes = [
               title: '角色管理',
               icon: 'sg sg-',
             },
-            component: () => import(/* webpackChunkName: "角色管理" */ '../views/page/roleManage'),
+            component: () => import(/* webpackChunkName: "角色管理" */ '../views/routesPage/roleManage'),
           },
         ]
       },
@@ -80,6 +78,18 @@ const routes = [
         component: () => import(/* webpackChunkName: "注册" */ '../views/register'),
       },
     ]
+  },
+  {
+    path: '/404',
+    name: '404',
+    meta: {
+      title: '404'
+    },
+    component: () => import(/* webpackChunkName: "404" */ '../views/404'),
+  },
+  {
+    path: '*',
+    redirect: '/404',
   }
 ]
 
@@ -99,14 +109,8 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
-// : [
-//   {
-//     path: '/:catchAll(.*)',
-//     component: () => import(/* webpackChunkName: "关于" */ '../views/page/about'),
-//     name: 'NotFound'
-//   }
-// ]
 
+import { MessageBox } from 'element-ui'
 // 导航守卫 · 前
 router.beforeEach((to, from, next) => {
   NProgress.start();// 开启网页加载进度条

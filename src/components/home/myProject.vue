@@ -1,9 +1,10 @@
 <!-- 我的项目 -->
 <template>
-    <cardVue v-loading="loading" :title="'我的开源项目(云端获取)'" :titleShow="true" shadow="nerver" style="color:#676a6c">
+    <cardVue v-loading="loading" :title="'我的开源项目(云端获取)'" :titleShow="true" shadow="nerver">
         <template v-slot:aa>
             <el-collapse v-model="activeNames">
-                <el-collapse-item v-for="(item,index) in projectData" :title="index+1+'. '+item.name" :name="item.name">
+                <el-collapse-item v-for="(item,index) in projectData" :title="index+1+'. '+item.name"
+                    :name="item.index">
                     <el-row>
                         <el-col :span="12">
                             <div class="grid-content bg-purple-light">官网预览：<el-link :href="item.homepage" size="12"
@@ -44,7 +45,7 @@ export default {
     data() {
         return {
             loading: true,
-            activeNames: [1],
+            activeNames: [],// 需要默认打开的
             projectData: [],// 文章数据
         }
     },
@@ -52,7 +53,6 @@ export default {
         this.$network({
             url: "gitee/api/v5/users/time-demon/repos?access_token=1629c7c7adafddca4620a3efb6a4de02&type=all&sort=created&direction=desc&page=1&per_page=20"
         }).then(res => {
-            console.log(res);
             for (let i = 0; i < res.length; i++) {
                 this.projectData.push({
                     name: res[i].name,
@@ -62,7 +62,6 @@ export default {
                 })
             }
             this.loading = false;
-            console.log(res);
         });
     },
 }

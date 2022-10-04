@@ -72,19 +72,18 @@ export default {
         // 获取导航栏路由
         let navData = this.$router.options.routes[0].children[0].children;
         for (let i = 0; i < navData.length; i++) {
-            navData[i].height = 0
+            navData[i].height = 0;// 一级导航的高
             if (navData[i].children != undefined) {
                 for (let j = 0; j < navData[i].children.length; j++) {
-                    navData[i].children[j].height = 0
-                }
-            }
+                    navData[i].children[j].height = 0;// 二级导航的高
+                };
+            };
         } this.navData = navData;
 
         // 监测视口尺寸
         window.onresize = () => {
             window.innerWidth <= 768 ? this.$parent.sidebarState = 'close' : this.$parent.sidebarState = 'open';
         };
-
         this.sidebar(this.sidebarState);
 
     },
@@ -110,6 +109,7 @@ export default {
                     let addrouteLabelData = JSON.parse(JSON.stringify(item));
                     addrouteLabelData.path = '/' + item.path;
                     this.addrouteLabel(addrouteLabelData);
+
                 } else { item.height = item.height == 0 ? this.navHeight : 0 }
             } else if (!item3) {// 如果是二级导航
                 item2.children == undefined || item2.children.length == 0 ? this.$router.push('/' + item.path + '/' + item2.path) : item2.height = item2.height == 0 ? this.navHeight : 0;

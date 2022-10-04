@@ -42,7 +42,7 @@
         </div>
 
         <div class="footer">
-            Copyright © 2018 ~ {{$store.state.nowDate.year}} {{host}} All Rights Reserved.
+            Copyright © 2018 ~ {{new Date().getFullYear()}} {{host}} All Rights Reserved.
         </div>
 
     </div>

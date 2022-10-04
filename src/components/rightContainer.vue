@@ -40,8 +40,10 @@
                     </div>
                 </div>
             </div>
+
             <!-- 路由标签 -->
             <routeLabelVue />
+
         </div>
 
         <!-- 右边容器的页面容器 -->
@@ -53,16 +55,13 @@
 </template>
 
 <script>
-import screenfull from 'screenfull'
+import screenfull from 'screenfull';// 全屏支持
 import crumbsVue from '@/components/default/crumbs.vue'
 import routeLabelVue from '@/components/default/routeLabel.vue'
 export default {
-    components: {
-        crumbsVue,
-        routeLabelVue
-    },
+    components: { crumbsVue, routeLabelVue },
     props: {
-        sidebarState: ''
+        sidebarState: '',
     },
     data() {
         return {
@@ -104,12 +103,6 @@ export default {
 
     },
     mounted() {
-        setTimeout(() => {
-            this.loading = false;
-        }, 300)
-
-        // 检测浏览器是否支持全屏
-        if (!screenfull.isEnabled) this.screenfullButState = false;
 
         this.viewSize = { innerWidth: window.innerWidth, innerHeight: window.innerHeight };
         window.onresize = () => {
@@ -120,27 +113,45 @@ export default {
                 this.$parent.sidebarState = 'open';
             }
         };
-
         this.navbar(this.sidebarState);
+
+        setTimeout(() => {
+            this.loading = false;
+        }, 300)
+
+        // 检测浏览器是否支持全屏
+        !screenfull.isEnabled ? this.screenfullButState = false : '';
 
     },
     methods: {
 
-        // 导航栏控制
-        navbar(state) {
-            if (state == 'fold') {
-                this.navbarCss.marginLeft = '55px';
-            } else if (state == 'open') {
-                this.navbarCss.marginLeft = '240px';
-            } else if (state == 'close') {
-                this.navbarCss.marginLeft = 0;
-            }
+        // 退出登录
+        signOut() {
+            this.$confirm('确定要退出系统么？', '温馨提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+                closeOnClickModal: false,
+                showClose: false,
+            }).then(() => {
+                localStorage.clear();
+                this.$router.push('/login');
+            }).catch(() => {
+            });
+        },
+
+        // 全屏
+        fullScreen() {
+            !this.screenfullState ? screenfull.request() : screenfull.exit();
+            this.screenfullState = !this.screenfullState;
         },
 
         // 打开右边链接 
         rightOpenClick(index) {
             if (this.rightOpens[index].url != '' && this.rightOpens[index].url != undefined) {
-                window.open(this.rightOpens[index].url)
+                window.open(this.rightOpens[index].url);
+            } else {
+                this.$message('该按钮暂未指定url');
             };
         },
 
@@ -153,27 +164,16 @@ export default {
             }
         },
 
-        // 全屏
-        fullScreen() {
-            if (!this.screenfullState) screenfull.request();
-            screenfull.exit();
-            this.screenfullState = !this.screenfullState;
+        // 导航栏控制
+        navbar(state) {
+            if (state == 'fold') {
+                this.navbarCss.marginLeft = '55px';
+            } else if (state == 'open') {
+                this.navbarCss.marginLeft = '240px';
+            } else if (state == 'close') {
+                this.navbarCss.marginLeft = 0;
+            }
         },
-
-        // 退出登录
-        signOut() {
-            this.$confirm('确定要退出系统么？', '温馨提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning',
-                closeOnClickModal: false,
-                showClose: false,
-            }).then(() => {
-                localStorage.clear();
-                this.$router.push('/login')
-            }).catch(() => {
-            });
-        }
 
     }
 }
