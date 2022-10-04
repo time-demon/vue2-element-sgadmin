@@ -1,12 +1,15 @@
 <template>
     <div class="routeLabel_container">
-        <div :class="['routeLabel',$route.fullPath == item.path?'routeLabelCheck':'']"
-            v-for="(item,index) in routeLabelData" @click="routeLabelCheck(index)" :title="item.path">
-            <div class="routeLabel_title ">
-                {{item.title}}
+        <transition name="el-zoom-in-center" v-for="(item,index) in routeLabelData">
+            <div v-show="item.show" :class="['routeLabel',$route.fullPath == item.path?'routeLabelCheck':'']"
+                @click="routeLabelCheck(index)" @contextmenu.prevent='mouseRight()'>
+                <div class="routeLabel_title ">
+                    {{item.title}}
+                </div>
+                <span v-show="item.close != false" class="routeLabel_close"
+                    @click.stop="routeLabelClose(index)">×</span>
             </div>
-            <span class="routeLabel_close" @click.stop="routeLabelClose(index)">×</span>
-        </div>
+        </transition>
     </div>
 </template>
 
@@ -18,34 +21,63 @@ export default {
         }
     },
     watch: {
-        "$store.state.routeLabel": {
+        "$store.state.routeLabel": {// 监听vuex里路由标签数据的变化
             handler: function (newVal, oldVal) {
                 this.getrouteLabelData();
-            }
+            },
+            deep: true
         },
     },
     mounted() {
+
+        // 设置默认的路由标签
+        let routeLabel = [// 这里是设置常驻标签
+            {
+                title: '首页',
+                path: '/index',
+                show: true,
+                close: false
+            },
+        ];
+        for (let i = 0; i < routeLabel.length; i++) {// 这里设置当前页面标签，会排除常驻标签
+            if (this.$route.fullPath != routeLabel[i].path) {
+                routeLabel.push(
+                    {
+                        title: this.$route.meta.title,
+                        path: this.$route.fullPath,
+                        show: true,
+                    })
+            }
+        }
+        this.$store.state.routeLabel = routeLabel;
+
         this.getrouteLabelData();
     },
     methods: {
+
+        mouseRight() {
+            console.log(1);
+        },
+
         // 获取路由标签
         getrouteLabelData() {
             this.routeLabelData = this.$store.state.routeLabel;
         },
+
         // 访问选定的路由标签
         routeLabelCheck(index) {
             this.$router.push(this.routeLabelData[index].path);
         },
+
         // 关闭选定的路由标签
         routeLabelClose(index) {
+            // 首先排除是首页且只有一个标签的时候
+            this.$store.state.routeLabel[index].show = false;
             if (this.$store.state.routeLabel[index - 1] == undefined && this.$store.state.routeLabel[index + 1] != undefined) { // 前无后有
                 this.$router.push(this.$store.state.routeLabel[index + 1].path);
-                console.log(1);
             } else if (this.$store.state.routeLabel[index - 1] != undefined && this.$store.state.routeLabel[index + 1] != undefined) {// 前有后有
-                console.log(2);
                 this.$router.push(this.$store.state.routeLabel[index + 1].path);
             } else if (this.$store.state.routeLabel[index - 1] != undefined && this.$store.state.routeLabel[index + 1] == undefined) { // 前有后无
-                console.log(3);
                 this.$router.push(this.$store.state.routeLabel[index - 1].path);
             } else if (this.$store.state.routeLabel[index - 1] == undefined && this.$store.state.routeLabel[index + 1] == undefined) {//前无后无
                 this.$router.push('/');
@@ -56,9 +88,13 @@ export default {
                 }]
                 return
             }
-            this.$store.state.routeLabel.splice(index, 1);
-        }
+            setTimeout(() => {
+                this.$store.state.routeLabel.splice(index, 1);
+            }, 200);
+        },
+
     },
+
 }
 </script>
 
@@ -66,22 +102,21 @@ export default {
 .routeLabel_container {
     display: flex;
     vertical-align: top;
-    padding: 5px 0;
-    border-bottom: 1px solid #e9e9e9;
-    height: 35px;
+    padding: 5px 5px 0;
+    height: auto;
 
     >.routeLabel {
         width: auto;
         margin: 0 2px;
-        font-size: 13px;
-        padding: 3px 8px;
-        background: #fff;
+        font-size: 14px;
+        padding: 3px 10px;
+        background: #eee;
         color: #aaa;
-        border: 1px solid #d8dce5;
         text-align: center;
         cursor: pointer;
         border-radius: 1px;
         display: flex;
+        justify-content: center;
         vertical-align: top;
         align-items: center;
 
@@ -97,22 +132,26 @@ export default {
             width: 10px;
             height: 10px;
             line-height: 10px;
+            color: #aaa;
         }
 
         >.routeLabel_close:hover {
-            background: #fff;
-            color: #42b983 !important;
+            color: var(--background_color);
         }
     }
 
     >.routeLabelCheck {
-        background: #42b983;
-        color: #fff;
-        border: 1px solid #42b983;
+        height: 25px;
+        background: var(--routeLabel_background);
+        color: #333;
+        border: none;
+        position: relative;
+        text-align: center;
+        border-radius: 2px 2px 0 0;
 
         >.routeLabel_title::before {
             content: "";
-            background: #fff;
+            background: var(--background_color);
             display: inline-block;
             width: 6px;
             height: 6px;
@@ -122,9 +161,10 @@ export default {
     }
 
     >.routeLabel:hover {
-        background: #42b983;
-        color: #fff;
-        border: 1px solid #42b983;
+        background: #fff;
+        color: var(--background_color);
+        border: none;
     }
+
 }
 </style>

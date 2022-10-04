@@ -82,7 +82,7 @@ export default {
 
         // 监测视口尺寸
         window.onresize = () => {
-            window.innerWidth <= 750 ? this.$parent.sidebarState = 'close' : this.$parent.sidebarState = 'open';
+            window.innerWidth <= 768 ? this.$parent.sidebarState = 'close' : this.$parent.sidebarState = 'open';
         };
 
         this.sidebar(this.sidebarState);
@@ -130,11 +130,12 @@ export default {
 
         // 添加到路由标签
         addrouteLabel(addrouteLabelData) {
-            if (this.$store.state.routeLabel.filter(itemb => itemb.path == addrouteLabelData.path).length == 0) {
+            if (this.$store.state.routeLabel.filter(item => item.path == addrouteLabelData.path).length == 0) {
                 this.$store.state.routeLabel.push({
                     title: addrouteLabelData.meta.title,
-                    path: addrouteLabelData.path
-                })
+                    path: addrouteLabelData.path,
+                    show: true
+                });
             };
         },
 

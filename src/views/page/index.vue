@@ -1,8 +1,6 @@
 <template>
     <div>
-
-        <templateInforVue style="width: 50%;" />
-
+        <templateInforVue class="mobileBlock" style="width: 50%;" />
     </div>
 </template>
 
@@ -13,6 +11,6 @@ export default {
         templateInforVue
     },
     methods: {
-    }
+    },
 }
 </script>

@@ -1,6 +1,6 @@
 <!-- 右边容器 -->
 <template>
-    <div class="right-container" :style="[navbarCss,{width: viewSize.innerWidth<750?'100vw':''}]">
+    <div class="right-container" :style="[navbarCss,{width: viewSize.innerWidth<768?'100vw':''}]">
         <div class="top-container">
 
             <div class="top-navbar-container">
@@ -15,7 +15,7 @@
                 </div>
 
                 <div class="tools-right">
-                    <div class="tools-right-control tool" :style="{display:viewSize.innerWidth<=750?'':''}">
+                    <div class="tools-right-control tool" :style="{display:viewSize.innerWidth<=768?'':''}">
                         <div :class="['tools-control hover',item.icon]" v-for="(item,index) in rightOpens"
                             :title="item.title" @click="rightOpenClick(index)">
                         </div>
@@ -30,8 +30,8 @@
                             <li class="avatar-tool">
                                 <i class="el-icon-ice-drink"></i> 个人中心
                             </li>
-                            <li class="avatar-tool" @click="sideSettings = true">
-                                <i class="el-icon-setting"></i> 布局设置
+                            <li class="avatar-tool" @click="">
+                                <i class="el-icon-setting"></i> 更改密码
                             </li>
                             <li class="avatar-tool" @click="signOut">
                                 <i class="el-icon-switch-button"></i> 退出登录
@@ -48,20 +48,15 @@
             <router-view class="appPage-container" v-loading="loading" />
         </keep-alive>
 
-        <!-- 侧边布局设置 -->
-        <sideSettingsVue :sideSettings="sideSettings" @sideSettingsClose="sideSettingsClose" />
-
     </div>
 </template>
 
 <script>
 import screenfull from 'screenfull'
-import sideSettingsVue from '@/components/sideSettings.vue'
 import crumbsVue from '@/components/crumbs.vue'
 import routeLabelVue from '@/components/routeLabel.vue'
 export default {
     components: {
-        sideSettingsVue,
         crumbsVue,
         routeLabelVue
     },
@@ -71,7 +66,6 @@ export default {
     data() {
         return {
             loading: true,
-            sideSettings: false,// 侧边设置弹窗
             screenfullButState: true,// 全屏按钮状态
             screenfullState: false,// 全屏状态
             viewSize: {},
@@ -119,7 +113,7 @@ export default {
         this.viewSize = { innerWidth: window.innerWidth, innerHeight: window.innerHeight };
         window.onresize = () => {
             this.viewSize = { innerWidth: window.innerWidth, innerHeight: window.innerHeight };
-            if (window.innerWidth <= 750) {
+            if (window.innerWidth <= 768) {
                 this.$parent.sidebarState = 'close';
             } else {
                 this.$parent.sidebarState = 'open';
@@ -130,11 +124,6 @@ export default {
 
     },
     methods: {
-
-        // 侧边布局设置弹窗关闭
-        sideSettingsClose(done) {
-            this.sideSettings = false;
-        },
 
         // 导航栏控制
         navbar(state) {
@@ -156,7 +145,7 @@ export default {
 
         // 侧边栏控制
         sidebar() {
-            if (window.innerWidth <= 750) {
+            if (window.innerWidth <= 768) {
                 this.$parent.sidebarState = this.$parent.sidebarState == 'open' ? 'close' : 'open';
             } else {
                 this.$parent.sidebarState = this.$parent.sidebarState == 'fold' ? 'open' : 'fold';
@@ -198,6 +187,7 @@ export default {
 
     >.top-container {
         >.top-navbar-container {
+            background: var(--background);
             border-bottom: 1px solid #e9e9e9;
             height: 50px;
             display: flex;
@@ -244,14 +234,15 @@ export default {
                     >.avatar-tools {
                         overflow: hidden;
                         background: #fff;
-                        min-width: 100px;
+                        width: max-content;
                         height: 0;
                         position: absolute;
-                        top: 45px;
+                        z-index: 100;
+                        top: 35px;
                         right: 10px;
                         box-shadow: 0 0 10px 0px #ddd;
                         border-radius: 3px;
-                        font-size: 12px;
+                        font-size: 14px;
 
                         i {
                             font-size: inherit !important;
@@ -298,6 +289,10 @@ export default {
             .hover:hover {
                 background: #f7f6f6;
             }
+        }
+
+        >.routeLabel_container {
+            background: var(--page_background);
         }
     }
 

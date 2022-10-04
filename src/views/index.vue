@@ -1,5 +1,6 @@
 <template>
     <div class="page-container">
+        <slot name="lrTools"></slot>
         <sidebarVue :sidebarState="sidebarState" />
         <mainVue :sidebarState="sidebarState" />
     </div>
@@ -21,16 +22,7 @@ export default {
     },
     mounted() {
 
-        // 设置默认的路由标签
-        let routeLabel = [
-            {
-                title: this.$route.meta.title,
-                path: this.$route.fullPath
-            }
-        ];
-        this.$store.state.routeLabel = routeLabel;
-
-        if (window.innerWidth < 750) {
+        if (window.innerWidth < 768) {
             this.sidebarState = 'close';
         };
 

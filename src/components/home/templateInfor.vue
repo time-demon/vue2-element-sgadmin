@@ -22,7 +22,7 @@
                     :title="item.name" :name="item.name">
                     <el-row>
                         <el-col :span="12">
-                            <div class="grid-content bg-purple">{{att}}</div>
+                            <div class="grid-content bg-purple">名称</div>
                         </el-col>
                         <el-col :span="12">
                             <div class="grid-content bg-purple-light">版本</div>

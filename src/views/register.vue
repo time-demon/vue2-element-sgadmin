@@ -1,5 +1,5 @@
 <template>
-    <div :class="['loginBox',innerWidth<=750?'mobile':'',themeState?'dark':'light']">
+    <div :class="['loginBox',innerWidth<=768?'mobile':'',themeState?'dark':'light']">
 
         <div class="theme">
             <el-switch style="display: block" v-model="themeState" active-color="#333" inactive-color="#bbb"
