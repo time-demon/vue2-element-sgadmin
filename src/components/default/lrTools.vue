@@ -1,3 +1,4 @@
+<!-- 右下角工具 -->
 <template>
     <div class="lrTools_container">
         <el-tooltip class="item" effect="dark" :content="theme=='theme_white'?'切换到暗黑模式':'切换到明亮模式'" placement="left"
@@ -17,7 +18,7 @@
 </template>
 
 <script>
-import themeSetVue from '@/components/themeSet.vue'
+import themeSetVue from '@/components/default/themeSet.vue'
 export default {
     components: { themeSetVue },
     data() {

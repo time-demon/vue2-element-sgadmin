@@ -139,7 +139,7 @@ router.beforeEach((to, from, next) => {
 
   // 通过云端设置网站名称
   network({
-    url: '/cloudGet'
+    url: 'api/cloudGet'
   }).then((res) => {
     store.state.siteConfig.title = res.data[0].title;
     document.title = to.meta.title + " - " + store.state.siteConfig.title;

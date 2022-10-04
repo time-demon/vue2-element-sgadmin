@@ -98,7 +98,7 @@ export default {
             let { form } = this;
             this.loading = true;
             this.$network({
-                url: `adminLogin?account=${form.account}&password=${form.password}`,
+                url: `/api/adminLogin?account=${form.account}&password=${form.password}`,
             }).then((res) => {
                 if (res.code == 200) {// 登录成功
                     localStorage.setItem("token", res.token);

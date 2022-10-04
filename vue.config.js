@@ -14,13 +14,21 @@ module.exports = defineConfig({
     open: true, // 自动启动浏览器
     host: 'localhost', // localhost
     proxy: {
-      '/api': { // 表示若请求地址有 “/api” 时，触发此代理机制
+      '/api': { // 自己的后端接口，表示若请求地址有 “/api” 时，触发此代理机制
         target: 'https://api.timebk.cn/', // 代理地址，后端接口地址
         // ws: true, // 是否开启实时通信
         changeOrigin: true, // 是否开启代理，在本地创建一个虚拟服务端
         pathRewrite: { // 重写路径
           '^/api': '' // 用 /api 代替 target 里的地址，即去掉路径中的 /api
         }
+      },
+      '/csdn': {// csdn接口
+        target: 'https://blog.csdn.net/',
+        // ws: true, 
+        changeOrigin: true,
+        pathRewrite: {
+          '^/csdn': ''
+        },
       },
     }
   },

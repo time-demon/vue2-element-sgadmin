@@ -43,6 +43,7 @@
             <!-- 路由标签 -->
             <routeLabelVue />
         </div>
+
         <!-- 右边容器的页面容器 -->
         <keep-alive>
             <router-view class="appPage-container" v-loading="loading" />
@@ -53,8 +54,8 @@
 
 <script>
 import screenfull from 'screenfull'
-import crumbsVue from '@/components/crumbs.vue'
-import routeLabelVue from '@/components/routeLabel.vue'
+import crumbsVue from '@/components/default/crumbs.vue'
+import routeLabelVue from '@/components/default/routeLabel.vue'
 export default {
     components: {
         crumbsVue,

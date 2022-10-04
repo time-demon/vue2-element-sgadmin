@@ -2,7 +2,7 @@ import axios from "axios"; // 网络请求文件的封装
 import { MessageBox } from 'element-ui';
 
 const network = axios.create({
-    baseURL: "/api",
+    baseURL: "",
     timeout: 3000 // 超时时间
 })
 

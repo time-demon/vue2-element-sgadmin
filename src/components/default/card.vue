@@ -1,3 +1,4 @@
+<!-- 卡片模板 -->
 <template>
     <el-card class="box-card" :shadow="shadow">
         <div slot="header" class="clearfix" v-if="titleShow">

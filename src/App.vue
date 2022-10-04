@@ -7,9 +7,11 @@
 </template>
 
 <script>
-import lrToolsVue from './components/lrTools.vue';// 右小角悬浮工具
+import lrToolsVue from './components/default/lrTools.vue';// 右小角悬浮工具
 export default {
   components: { lrToolsVue },
+  mounted() {
+  }
 }
 </script>
 
@@ -32,11 +34,25 @@ export default {
 // 标签公共样式自定义
 a {
   color: inherit;
+  font-size: inherit;
 }
 
 p {
   font-size: 13px;
   line-height: 18px;
+}
+
+// 标签公共样式自定义
+
+// elementUI 样式重置
+
+.el-link {
+  font-size: inherit;
+}
+
+.el-card {
+  height: max-content;
+  margin-bottom: 10px;
 }
 
 .el-card__header {
@@ -53,6 +69,34 @@ p {
 .el-message-box {
   max-width: 95vw;
 }
+
+.el-collapse-item__header {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+  display: block;
+
+  >.el-collapse-item__arrow {
+    position: absolute;
+    top: 11px;
+    right: 0px;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    border-radius: 50%;
+  }
+
+  >.el-collapse-item__arrow:hover {
+    background: #eee;
+  }
+}
+
+
+// elementUI 样式重置
 
 // pc端class类
 @media screen and (min-width: 768px) {

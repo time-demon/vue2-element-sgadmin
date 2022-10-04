@@ -1,3 +1,4 @@
+<!-- 路由标签 -->
 <template>
     <div class="routeLabel_container">
         <transition name="el-zoom-in-center" v-for="(item,index) in routeLabelData">

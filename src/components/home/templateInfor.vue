@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import cardVue from '@/components/card.vue';
+import cardVue from '@/components/default/card.vue';
 import Config from '#/package.json';
 export default {
     components: {
