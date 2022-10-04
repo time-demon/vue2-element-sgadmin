@@ -1,5 +1,5 @@
 <template>
-    <cardVue title="作者CSDN文章(自动更新)" :titleShow="true" shadow="nerver" style="color:#676a6c">
+    <cardVue v-loading="loading" title="我的CSDN文章(自动更新，仅最新三篇)" :titleShow="true" shadow="nerver" style="color:#676a6c">
         <template v-slot:aa>
             <el-collapse v-model="activeNames">
                 <el-collapse-item v-for="(item,index) in articleData" :title="index+1+'. '+item.title"
@@ -29,6 +29,7 @@ export default {
     },
     data() {
         return {
+            loading: true,
             activeNames: [1],
             articleData: [],// 文章数据
         }
@@ -37,8 +38,10 @@ export default {
         this.$network({
             url: "csdn/community/home-api/v1/get-business-list?businessType=blog&username=qq_19322833"
         }).then(res => {
-            console.log(res.data.list);
-            this.articleData = res.data.list;
+            for (let i = 0; i < 3; i++) {
+                this.articleData.push(res.data.list[i])
+            }
+            this.loading = false;
         });
     },
 }

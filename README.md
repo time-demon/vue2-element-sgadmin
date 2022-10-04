@@ -1,4 +1,4 @@
-# 时光Vue2后台管理系统 vue2-element-admin-sg
+# 时光Vue2后台管理系统 vue2-element-sgadmin
 # 版本：v1.0.2
 # 作者：时光 
 # QQ：1937966358

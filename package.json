@@ -1,10 +1,10 @@
 {
-  "name": "vue2-element-admin-sg",
+  "name": "vue2-element-sgadmin",
   "author": "时光",
-  "version": "1.0.2",
+  "version": "1.0.6",
   "private": true,
-  "github": "https://github.com/time-demon/vue2-element-admin-sg",
-  "gitee": "https://gitee.com/time-demon/vue2-element-admin-sg",
+  "github": "https://github.com/time-demon/vue2-element-sgadmin",
+  "gitee": "https://gitee.com/time-demon/vue2-element-sgadmin",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build"

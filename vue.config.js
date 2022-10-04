@@ -14,6 +14,14 @@ module.exports = defineConfig({
     open: true, // 自动启动浏览器
     host: 'localhost', // localhost
     proxy: {
+      '/gitee': {// gitee接口
+        target: 'https://gitee.com/',
+        // ws: true, 
+        changeOrigin: true,
+        pathRewrite: {
+          '^/gitee': ''
+        },
+      },
       '/api': { // 自己的后端接口，表示若请求地址有 “/api” 时，触发此代理机制
         target: 'https://api.timebk.cn/', // 代理地址，后端接口地址
         // ws: true, // 是否开启实时通信

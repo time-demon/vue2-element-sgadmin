@@ -1,8 +1,13 @@
 <template>
     <div>
         <div class="default_container mobileBlock">
-            <templateInforVue />
-            <csdnVue />
+            <div>
+                <templateInforVue />
+            </div>
+            <div>
+                <myProjectVue />
+                <csdnVue />
+            </div>
         </div>
     </div>
 </template>
@@ -10,8 +15,9 @@
 <script>
 import templateInforVue from "@/components/home/templateInfor.vue";
 import csdnVue from "@/components/home/csdn.vue";
+import myProjectVue from "@/components/home/myProject.vue";
 export default {
-    components: { templateInforVue, csdnVue },
+    components: { templateInforVue, csdnVue, myProjectVue },
     methods: {
     },
 }

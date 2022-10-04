@@ -75,7 +75,7 @@ export default {
                 {
                     title: '项目Github',
                     icon: 'sg sg-github',
-                    url: 'https://github.com/time-demon/vue2-element-admin-sg'
+                    url: 'https://github.com/time-demon/vue2-element-sgadmin'
                 },
                 {
                     title: '使用文档',

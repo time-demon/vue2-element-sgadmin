@@ -1,10 +1,12 @@
 <template>
     <cardVue title="模板信息" :titleShow="true" shadow="nerver" style="color:#676a6c">
         <template v-slot:aa>
-            <h2 class="title"> 时光后台管理系统</h2>
+            <h2 class="title"> 时光后台管理系统（前后端分离）</h2>
             <p class="info">作者：{{Config.author}} | 当前版本：v{{Config.version}}</p>
-            <p>主要技术：Vue2全家桶、Element UI、Axios、Sass</p>
-            <p>特点：开箱即用，双端自适应响应式布局、三级导航自适应、页面数据缓存、路径面包屑和路由标签、完整的登陆验证交互和token验证交互流程等，更多开发中...</p>
+            <p>前端运用：Vue2全家桶、Element UI、Axios、Sass</p>
+            <p>后端运用：Node.js、Express、MongoDB、jsonwebtoken</p>
+            <p>特点：开箱即用，双端自适应响应式布局、主题更换、gzip压缩支持、Element UI样式优化、三级导航、页面数据缓存、路径面包屑和路由标签、完整的登陆验证交互和token验证交互等，更多开发中...
+            </p>
             <p class="link">
                 <el-tag type="success" size="medium">$免费开源</el-tag>
                 <el-tag size="medium">
@@ -19,7 +21,7 @@
             </p>
             <el-collapse v-model="activeNames">
                 <el-collapse-item v-for="(item,att) in Config" v-if="att=='dependencies'||att=='devDependencies'"
-                    :title="item.name" :name="item.name">
+                    :title="item.name+'(自动更新)'" :name="item.name">
                     <el-row>
                         <el-col :span="12">
                             <div class="grid-content bg-purple">名称</div>
@@ -59,7 +61,6 @@ export default {
         this.Config = { dependencies: Config.dependencies, devDependencies: Config.devDependencies, author: Config.author, version: Config.version, github: Config.github };
         this.Config.dependencies.name = '环境依赖';
         this.Config.devDependencies.name = '环境依赖(仅开发环境)';
-        console.log(Config);
     },
     methods: {
     },
