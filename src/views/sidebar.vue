@@ -4,7 +4,7 @@
 
         <div class="sidebar-top-container">
             <div class="sidebar-top">
-                <img class="logo" src="http://23.224.144.109:8023/static/img/logo.4eeb8a8e.png" alt="">
+                <img class="logo" src="@/assets/img/sgadmin_logo.png" alt="">
                 <span>时光管理系统</span>
             </div>
         </div>
@@ -171,13 +171,14 @@ export default {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
             >.logo {
                 width: auto;
-                height: 30px;
+                height: 35px;
                 padding-right: 5px;
-                position: relative;
-                top: 8px;
                 vertical-align: top;
             }
 
