@@ -4,7 +4,7 @@
 
         <div class="sidebar-top-container">
             <div class="sidebar-top">
-                <img class="logo" src="@/assets/img/sgadmin_logo.png" alt="">
+                <img class="logo" src="@/assets/img/logo.png" alt="">
                 <span>时光管理系统</span>
             </div>
         </div>
