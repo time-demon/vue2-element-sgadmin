@@ -51,7 +51,7 @@ export default {
     },
     mounted() {
         this.$network({
-            url: "gitee/api/v5/users/time-demon/repos?access_token=1629c7c7adafddca4620a3efb6a4de02&type=all&sort=created&direction=desc&page=1&per_page=20"
+            url: "gitee/api/v5/users/time-demon/repos?access_token=5d877f8cea0c4d69dc2e51f903cd2fc8&type=all&sort=created&direction=desc&page=1&per_page=20"
         }).then(res => {
             for (let i = 0; i < res.length; i++) {
                 this.projectData.push({
