@@ -2,7 +2,12 @@
     <cardVue title="模板信息" :titleShow="true" shadow="nerver">
         <template v-slot:aa>
             <h2 class="title"> 时光后台管理系统（前后端分离）</h2>
-            <p class="info">作者：{{Config.author}} | 当前版本：v{{Config.version}}</p>
+            <p class="info">
+                作者：{{Config.author}} | 当前版本：v{{Config.version}}
+                <el-link type="primary" v-if="newV.state" style="top: -3px;" target="_blank" :href="Config.github">
+                    有新版本{{newV.v}}
+                </el-link>
+            </p>
             <p>前端运用：Vue2全家桶、Element UI、Axios、Sass
                 <br>后端运用：Node.js、Express、MongoDB、jsonwebtoken
             </p>
@@ -54,13 +59,38 @@ export default {
     data() {
         return {
             Config: {},// 获取到的配置
-            activeNames: ['1']
+            activeNames: ['1'],
+            newV: {
+                state: false,
+                v: '',
+            },
         }
     },
     mounted() {
+        this.$network({
+            url: '/api/cloudGet'
+        }).then(res => {
+            this.newV = {
+                state: this.compareV(res.data[0].v, this.Config.version),
+                v: res.data[0].v
+            };
+        })
         this.Config = { dependencies: Config.dependencies, devDependencies: Config.devDependencies, author: Config.author, version: Config.version, github: Config.github };
         this.Config.dependencies.name = '环境依赖';
         this.Config.devDependencies.name = '环境依赖(仅开发环境)';
+    },
+    methods: {
+        // 比较版本
+        compareV(newV, oldV) {
+            newV = newV.split('.');
+            oldV = oldV.split('.');
+            for (let i = 0; i < 3; i++) {
+                if (Number(newV[i]) > Number(oldV[i])) {
+                    return true
+                }
+            }
+            return false
+        },
     },
 }
 </script>
