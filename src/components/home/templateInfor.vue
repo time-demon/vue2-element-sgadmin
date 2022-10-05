@@ -31,10 +31,10 @@
                     :title="item.name" :name="item.name">
                     <el-row>
                         <el-col :span="12">
-                            <div class="grid-content bg-purple">名称</div>
+                            <div class="grid-content bg-purple">依赖名称</div>
                         </el-col>
                         <el-col :span="12">
-                            <div class="grid-content bg-purple-light">版本</div>
+                            <div class="grid-content bg-purple-light">当前版本</div>
                         </el-col>
                     </el-row>
                     <el-row v-for="(itemb,att) in item" v-if="att != 'name'">
