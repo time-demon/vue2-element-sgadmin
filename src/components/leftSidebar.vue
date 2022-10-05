@@ -5,7 +5,7 @@
         <div class="sidebar-top-container">
             <div class="sidebar-top">
                 <img class="logo" src="@/assets/img/logo.png" alt="">
-                <span>时光管理系统</span>
+                <span>{{$store.state.siteInfo.title}}</span>
             </div>
         </div>
 
@@ -70,7 +70,7 @@ export default {
         this.nowRoute = this.$route.fullPath;
 
         // 获取导航栏路由
-        let navData = this.$router.options.routes[0].children[0].children;
+        let navData = this.$router.options.routes[0].children;
         for (let i = 0; i < navData.length; i++) {
             navData[i].height = 0;// 一级导航的高
             if (navData[i].children != undefined) {

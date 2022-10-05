@@ -6,10 +6,12 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     viewSize: {},// 视口尺寸
-    siteConfig: {
-      title: '',
+    siteInfo: {// 网站信息
+      title: '时光后台管理系统',
     },
+    userInfo: {},
     routeLabel: [],// 路由标签
+    roles: true,// 权限状态
   },
   getters: {
   },

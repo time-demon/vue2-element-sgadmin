@@ -19,6 +19,21 @@ import csdnVue from "@/components/home/csdn.vue";
 import myProjectVue from "@/components/home/myProject.vue";
 export default {
     components: { templateInforVue, csdnVue, myProjectVue },
+    mounted() {
+        // 消息提示
+        let html = `
+            <h3>感谢阁下使用：${this.$store.state.siteInfo.title}</h3>
+            <p>tips：推荐 电脑端 预览本站哟~</p>
+        `
+        this.$alert(html, '您好！', {
+            confirmButtonText: '确定',
+            dangerouslyUseHTMLString: true,
+            closeOnClickModal: true,
+            callback: action => {
+            }
+        });
+
+    },
 }
 </script>
 

@@ -2,21 +2,22 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+// 网络请求
+import network from "@/network";
 
-Vue.config.productionTip = false;
+// 全局方法挂载
+Vue.prototype.$network = network;
+
+// 全局组件挂载
 
 // 全局主题样式
 import './assets/theme/theme.min.css'
 
-// css默认样式重置文件
+// css默认样式重置
 import '@/assets/css/normalize/normalize.min.css'
 
 // ElemnetUI样式重置文件
 import '@/assets/css/element/reset.min.css'
-
-// 挂载网络请求
-import network from "@/network";
-Vue.prototype.$network = network;
 
 // ElementUI 完整引入
 // import ElementUI from 'element-ui';
@@ -30,6 +31,7 @@ Vue.prototype.$message = Message;
 Vue.prototype.$alert = MessageBox.alert;
 Vue.prototype.$confirm = MessageBox.confirm;
 
+Vue.config.productionTip = false;
 new Vue({
   network,
   router,

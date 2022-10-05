@@ -23,7 +23,7 @@ export default {
         $route: {
             handler: function (val, oldVal) {
                 // 面包屑
-                this.crumbs = this.$route.matched.filter((item, index) => index != 0 && index != 1 && item.path != '/index');
+                this.crumbs = this.$route.matched.filter((item, index) => index != 0 && item.path != '/home');
             },
             // 深度观察监听
             deep: true
@@ -31,7 +31,7 @@ export default {
     },
     mounted() {
         // 获取面包屑
-        this.crumbs = this.$route.matched.filter((item, index) => index != 0 && index != 1 && item.path != '/index');
+        this.crumbs = this.$route.matched.filter((item, index) => index != 0 && item.path != '/home');
     },
 }
 </script>

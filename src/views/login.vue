@@ -10,7 +10,7 @@
 
         <div class="login" v-loading="loading" :style="innerWidth>boxWidth?'width:'+boxWidth +'px':''">
             <div class="title">
-                {{$store.state.siteConfig.title}} - 后台管理系统
+                {{$store.state.siteInfo.title}}
             </div>
 
             <div class="formBox">
@@ -102,6 +102,10 @@ export default {
             }).then((res) => {
                 if (res.code == 200) {// 登录成功
                     localStorage.setItem("token", res.token);
+                    let userInfo = res.data;
+                    userInfo.token = res.token;
+                    localStorage.setItem("userInfo", JSON.stringify(userInfo));// 用户信息，包括token
+                    localStorage.setItem("routesRoles", JSON.stringify(res.routesRoles));// 路由权限
                     this.$message({
                         message: '登录成功，正在跳转...',
                         type: 'success',

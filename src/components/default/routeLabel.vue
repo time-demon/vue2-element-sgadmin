@@ -35,7 +35,7 @@ export default {
         let routeLabel = [// 这里是设置常驻标签
             {
                 title: '首页',
-                path: '/index',
+                path: '/home',
                 show: true,
                 close: false
             },
