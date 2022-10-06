@@ -120,20 +120,29 @@ export default {
             };
             _this.ruleForm.addTime = dateTime().time;// 添加时间
             this.$refs[formName].validate((valid) => {
+                console.log(233);
                 this.$network({
                     method: "POST",
                     url: '/api/rolesAdd',
                     data: _this.ruleForm
                 }).then(res => {
+                    console.log(2);
+                    console.log(res.code);
                     if (res.code == 200) {
-                        _this.loading = false;
                         _this.dialogFormVisible = false;
                         this.$message({
                             message: '成功添加',
                             type: 'success'
                         });
                         _this.$parent.tableDataGet()
+                    } else if (res.code == -2) {
+                        console.log(222);
+                        this.$message({
+                            message: '已有该角色',
+                            type: 'error'
+                        });
                     }
+                    _this.loading = false;
                 })
             });
         }
