@@ -21,7 +21,6 @@ export default {
     },
     mounted() {
 
-
         // console.log(this.$route.fullPath);
         let thisPagefullPath = this.$route.fullPath;
         // console.log(this.$router.options.routes[0].children);

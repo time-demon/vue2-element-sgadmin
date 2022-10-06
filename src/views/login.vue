@@ -23,7 +23,7 @@
                     </div>
                     <div class="input">
                         <el-input size="small" v-model="form.password" clearable prefix-icon="el-icon-lock"
-                            show-password placeholder="密码..." @input="inputDetection">
+                            show-password placeholder="密码..." @input="inputDetection" @keyup.enter.native="submit">
                         </el-input>
                         <div class="tip"><i :class="passwordTip==''?'':'el-icon-warning-outline'"></i> {{passwordTip}}
                         </div>

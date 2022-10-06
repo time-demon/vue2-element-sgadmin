@@ -5,7 +5,9 @@
         </div>
         <cardVue :title="''" :titleShow="false" shadow="nerver">
             <template v-slot:aa>
-                <el-table :data="tableData" border style="width: 100%" v-loading="loading" stripe>
+                <el-table :data="tableData" style="width: 100%" v-loading="loading" stripe ref="tabelForm">
+                    <el-table-column type="selection" width="55" :selectable="selectDisableRoom">
+                    </el-table-column>
                     <el-table-column fixed prop="addTime(addTime)" label="添加时间" width="180">
                         <template slot-scope="scope">
                             <i class="el-icon-time"></i>
@@ -18,8 +20,8 @@
                     </el-table-column>
                     <el-table-column fixed="right" label="操作">
                         <template slot-scope="scope">
-                            <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-                            <el-button @click="openRoleChange(scope.row)" type="text" size="small">编辑</el-button>
+                            <el-button @click="openRoleChange(scope.row)" type="text" size="small"
+                                v-if="scope.row.ident != 'admin'">编辑</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -52,6 +54,13 @@ export default {
             return dateTime('parse', addTime).fullTime
         },
 
+        // 设置不能勾选的
+        selectDisableRoom(row, index) {
+            if (row.ident != 'admin') {
+                return true
+            }
+        },
+
         tableDataGet() {
             this.loading = true;
             this.$network({
@@ -65,15 +74,12 @@ export default {
         // 打开添加角色弹窗表单
         openRoleAdd() {
             this.$refs.addDialog.openRoleAdd();
+            console.log(this.$refs.tabelForm.selection);
         },
 
         // 打开修改角色弹窗表单
         openRoleChange(row) {
             this.$refs.addDialog.openRoleChange(row);
-        },
-
-        handleClick(row) {
-            console.log(row);
         },
 
     },

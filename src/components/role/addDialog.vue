@@ -8,8 +8,8 @@
             <el-form-item label="权限字符" prop="ident">
                 <el-input v-model="ruleForm.ident" placeholder="如：user1、user2"></el-input>
             </el-form-item>
-            <el-form-item label="菜单权限" prop="treeData">
-                <el-tree node-key="fullPath" :data="treeData" :props="props" show-checkbox ref="tree"></el-tree>
+            <el-form-item label="菜单权限" prop="menuTreeData">
+                <el-tree node-key="fullPath" :data="menuTreeData" :props="props" show-checkbox ref="tree"></el-tree>
             </el-form-item>
             <el-form-item label="状态" prop="state">
                 <el-switch v-model="ruleForm.state"></el-switch>
@@ -34,41 +34,42 @@ export default {
             dialogFormVisible: false,
             ruleForm: {},
             rules: {
-                // name: [
-                //     { required: true, message: '请输入角色名称', trigger: 'blur' },
-                // ],
-                // ident: [
-                //     { required: true, message: '请输入权限字符', trigger: 'change' }
-                // ],
+                name: [
+                    { required: true, message: '请输入角色名称', trigger: 'blur' },
+                ],
+                ident: [
+                    { required: true, message: '请输入权限字符', trigger: 'change' }
+                ],
             },
             props: {
                 label: 'title',
                 children: 'children'
             },
             count: 1,
-            treeData: [],
+            menuTreeData: [],
         }
     },
     mounted() {
+        // 初始化表单数据 
         this.rolePopupReset();
+
         let routes = this.$router.options.routes[0].children;
-        console.log(1, routes);
-        console.log(2, this.$store.state.rolesRoutes);
+        // 递归实现自定义数据
         // 遍历一级导航
         for (let i = 0; i < routes.length; i++) {
-            this.treeData.push({ fullPath: '/' + routes[i].path, title: routes[i].meta.title })
+            this.menuTreeData.push({ fullPath: '/' + routes[i].path, title: routes[i].meta.title })
             // 如果一级导航里有二级导航
             if (routes[i].children != undefined) {
-                this.treeData[i].children = [];
+                this.menuTreeData[i].children = [];
                 // 遍历二级导航
                 for (let j = 0; j < routes[i].children.length; j++) {
-                    this.treeData[i].children.push({ fullPath: '/' + routes[i].path + '/' + routes[i].children[j].path, title: routes[i].children[j].meta.title });
+                    this.menuTreeData[i].children.push({ fullPath: '/' + routes[i].path + '/' + routes[i].children[j].path, title: routes[i].children[j].meta.title });
                     // 如果二级导航里有三级导航
                     if (routes[i].children[j].children != undefined) {
-                        this.treeData[i].children[j].children = [];
+                        this.menuTreeData[i].children[j].children = [];
                         // 遍历三级导航
                         for (let k = 0; k < routes[i].children[j].children.length; k++) {
-                            this.treeData[i].children[j].children.push({ fullPath: '/' + routes[i].path + '/' + routes[i].children[j].path + '/' + routes[i].children[j].children[k].path, title: routes[i].children[j].children[k].meta.title })
+                            this.menuTreeData[i].children[j].children.push({ fullPath: '/' + routes[i].path + '/' + routes[i].children[j].path + '/' + routes[i].children[j].children[k].path, title: routes[i].children[j].children[k].meta.title })
                         }
                     }
                 }
@@ -77,22 +78,18 @@ export default {
     },
     methods: {
 
-        handleCheckChange(data, checked, indeterminate) {
-            console.log(data, checked, indeterminate);
-        },
-
-        // 角色添加和修改弹窗表单重载
-        rolePopupReset(type) {
-            if (type == undefined) {
+        // 弹窗表单数据重载,可传入自定义数据
+        rolePopupReset(data) {
+            if (data == undefined) {
                 this.ruleForm = {
-                    name: '',
-                    ident: '',
-                    state: true,
-                    remark: '',
-                    treeData: [],
+                    name: '',// 名称
+                    ident: '',// 字符
+                    state: true,// 状态
+                    remark: '',// 备注
+                    menuTreeData: [],// 菜单权限树的数据
                 };
             } else {
-                this.ruleForm = type;
+                this.ruleForm = data;
             }
         },
 
@@ -104,9 +101,9 @@ export default {
 
         // 打开修改角色弹窗表单
         openRoleChange(row) {
-            console.log(row.treeData);
-            for (let i = 0; i < row.treeData.length; i++) {
-                console.log(row.treeData[i].split('/'));
+            console.log(row.menuTreeData);
+            for (let i = 0; i < row.menuTreeData.length; i++) {
+                console.log(row.menuTreeData[i].split('/'));
             }
 
             this.rolePopupReset(row);
@@ -119,7 +116,7 @@ export default {
             _this.loading = true;
             // 循环添加菜单权限到ruleForm数据中
             for (let i = 0; i < this.$refs.tree.getCheckedNodes(false, true).length; i++) {
-                this.ruleForm.treeData.push(this.$refs.tree.getCheckedNodes(false, true)[i].fullPath);
+                this.ruleForm.menuTreeData.push(this.$refs.tree.getCheckedNodes(false, true)[i].fullPath);
             };
             _this.ruleForm.addTime = dateTime().time;// 添加时间
             this.$refs[formName].validate((valid) => {

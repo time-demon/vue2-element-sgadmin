@@ -157,11 +157,12 @@ export default {
 
         // 侧边栏控制
         sidebar() {
-            if (window.innerWidth <= 768) {
-                this.$parent.sidebarState = this.$parent.sidebarState == 'open' ? 'close' : 'open';
-            } else {
-                this.$parent.sidebarState = this.$parent.sidebarState == 'fold' ? 'open' : 'fold';
-            }
+            this.$parent.sidebarState = this.$parent.sidebarState == 'open' ? 'close' : 'open';
+            // if (window.innerWidth <= 768) {
+            //     this.$parent.sidebarState = this.$parent.sidebarState == 'open' ? 'close' : 'open';
+            // } else {
+            //     this.$parent.sidebarState = this.$parent.sidebarState == 'fold' ? 'open' : 'fold';
+            // }
         },
 
         // 导航栏控制

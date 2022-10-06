@@ -34,7 +34,7 @@ let routes = [
         path: 'system',
         meta: {
           title: '系统管理',
-          icon: 'sg sg-dashboard',
+          icon: 'sg sg-shezhi',
         },
         component: () => import(/* webpackChunkName: "关于" */ '../views/blank'),
         children: [
@@ -42,8 +42,8 @@ let routes = [
             path: 'role',
             name: 'role',
             meta: {
+              icon: 'sg sg-jiaosequanxian',
               title: '角色管理',
-              icon: 'sg sg-dashboard',
             },
             component: () => import(/* webpackChunkName: "角色管理" */ '../views/routesPage/role'),
           },
@@ -126,7 +126,7 @@ let rolesRoutes = [
 routes.push.apply(routes[0].children, rolesRoutes);
 
 //将权限路由添加到vuex里
-store.state.rolesRoutes = rolesRoutes;
+store.state.rolesRoutes = JSON.parse(JSON.stringify(rolesRoutes));
 
 const router = new VueRouter({
   mode: 'history',
@@ -137,7 +137,6 @@ const router = new VueRouter({
 import { MessageBox } from 'element-ui'
 // 导航守卫 · 前
 router.beforeEach((to, from, next) => {
-  console.log(to);
 
   NProgress.start();// 开启网页加载进度条
 
@@ -168,14 +167,12 @@ router.beforeEach((to, from, next) => {
 
   // 进行页面访问权限判断，这个方法同时兼顾了切换页面形式和直接访问形式
   // 首页获取后端是否有当前页面的配置数据，从localStorage里获取，请在登录页面里的登录请求方法的回调里赋值
-  // 这里采用的是通过 name 验证 
-  store.state.rolesRoutes = JSON.parse(JSON.stringify(rolesRoutes));
+  // 这里采用的是通过 fullPath完整路径 判断(比如 /system/role )
   if (localStorage.getItem('roles') != null) {// 如果已登录
     let thisUserRoles = JSON.parse(localStorage.getItem('roles'));// 获取当前用户的权限配置
-    console.log(222, rolesRoutes);
-    if (rolesRoutes.filter(item => item.name == to.name) != 0) {// 如果当前页面属于权限路由
-      if (thisUserRoles.routes.filter(item => item == to.name).length == 0) {//如果当前页面用户无权限
-        MessageBox.alert('你无权访问当前页面！', '警告', {
+    if (rolesRoutes.filter(item => item.name == to.name) != 0) {// 如果当前页面属于权限路由，这里通过name判定
+      if (thisUserRoles.routes.filter(item => item == to.fullPath).length == 0) {//如果当前页面用户无权限
+        MessageBox.alert('您无权访问当前页面！', '警告', {
           confirmButtonText: '确定',
           showClose: false,
           closeOnClickModal: false,
