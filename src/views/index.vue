@@ -21,6 +21,33 @@ export default {
     },
     mounted() {
 
+
+        // console.log(this.$route.fullPath);
+        let thisPagefullPath = this.$route.fullPath;
+        // console.log(this.$router.options.routes[0].children);
+        let nowRoutes = this.$router.options.routes[0].children;
+        let a = []
+        // console.log(nowRoutes.length);
+        // 遍历一级导航
+        for (let i = 0; i < nowRoutes.length; i++) {
+            // 验证是否是当前页面
+            if ('/' + nowRoutes[i].path == thisPagefullPath) {
+                a.push('/' + nowRoutes[i].path)
+                break
+            }
+            // 如果一级导航有二级导航
+            if (nowRoutes[i].children != undefined && nowRoutes[i].children.length != 0) {
+                // 遍历二级导航
+                for (let j = 0; j < nowRoutes[i].children.length; j++) {
+                    // 验证是否是当前页面
+                    if ('/' + nowRoutes[i].path + '/' + nowRoutes[i].children[j].path == thisPagefullPath) {
+                        a.push('/' + nowRoutes[i].path + '/' + nowRoutes[i].children[j].path)
+                        break
+                    }
+                }
+            }
+        }
+
         if (window.innerWidth < 768) {
             this.sidebarState = 'close';
         };

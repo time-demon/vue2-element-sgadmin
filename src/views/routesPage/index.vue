@@ -24,6 +24,7 @@ export default {
         let html = `
             <h3>感谢阁下使用：${this.$store.state.siteInfo.title}</h3>
             <p>tips：推荐 电脑端 预览本站哟~</p>
+            <p>角色权限路由功能目前进度：40%</p>
         `
         this.$alert(html, '您好！', {
             confirmButtonText: '确定',

@@ -29,43 +29,25 @@ let routes = [
           icon: 'sg sg-dashboard',
         },
         component: () => import(/* webpackChunkName: "后台模板" */ '../views/routesPage'),
-      }, {
-        path: 'baidumap',
-        name: 'baidumap',
+      },
+      {
+        path: 'system',
         meta: {
-          title: '百度地图',
+          title: '系统管理',
           icon: 'sg sg-dashboard',
         },
-        component: () => import(/* webpackChunkName: "百度地图" */ '../views/routesPage/baidumap'),
-      },
-      {
-        path: 'about',
-        name: 'about',
-        meta: {
-          title: '关于',
-          icon: 'sg sg-',
-        },
-        component: () => import(/* webpackChunkName: "关于" */ '../views/routesPage/about'),
+        component: () => import(/* webpackChunkName: "关于" */ '../views/blank'),
         children: [
           {
-            path: 'about',
-            name: 'about',
+            path: 'role',
+            name: 'role',
             meta: {
-              title: '关于1',
-              icon: 'sg sg-',
+              title: '角色管理',
+              icon: 'sg sg-dashboard',
             },
-            component: () => import(/* webpackChunkName: "关于" */ '../views/routesPage/about'),
+            component: () => import(/* webpackChunkName: "角色管理" */ '../views/routesPage/role'),
           },
         ]
-      },
-      {
-        path: 'roleManage',
-        name: 'roleManage',
-        meta: {
-          title: '角色管理',
-          icon: 'sg sg-',
-        },
-        component: () => import(/* webpackChunkName: "角色管理" */ '../views/routesPage/roleManage'),
       },
     ]
   },
@@ -100,26 +82,51 @@ let routes = [
 ]
 
 // 需要访问权限的路由，前端自由化，后端只需要对name值进行权限标识(如{"path": "/baidumap1","roles": "admin"})，前端再通过传回的roles进行定向验证
-let rolesRoutes = [{
-  path: 'baidumap1',
-  name: 'baidumap1',
-  meta: {
-    title: '百度地图1',
-    icon: 'sg sg-dashboard',
+let rolesRoutes = [
+  {
+    path: 'about',
+    name: 'about',
+    meta: {
+      title: '关于',
+      icon: 'sg sg-',
+    },
+    component: () => import(/* webpackChunkName: "关于" */ '../views/routesPage/about'),
+    children: [
+      {
+        path: 'about',
+        name: 'about',
+        meta: {
+          title: '关于1',
+          icon: 'sg sg-',
+        },
+        component: () => import(/* webpackChunkName: "关于" */ '../views/routesPage/about'),
+      },
+    ]
   },
-  component: () => import(/* webpackChunkName: "百度地图1" */ '../views/routesPage/baidumap'),
-},
-{
-  path: 'baidumap2',
-  name: 'baidumap2',
-  meta: {
-    title: '百度地图2',
-    icon: 'sg sg-dashboard',
+  {
+    path: 'baidumap1',
+    name: 'baidumap1',
+    meta: {
+      title: '百度地图1',
+      icon: 'sg sg-dashboard',
+    },
+    component: () => import(/* webpackChunkName: "百度地图1" */ '../views/routesPage/baidumap'),
   },
-  component: () => import(/* webpackChunkName: "百度地图2" */ '../views/routesPage/baidumap'),
-}]
+  {
+    path: 'baidumap2',
+    name: 'baidumap2',
+    meta: {
+      title: '百度地图2',
+      icon: 'sg sg-dashboard',
+    },
+    component: () => import(/* webpackChunkName: "百度地图2" */ '../views/routesPage/baidumap'),
+  }]
 
-routes.push.apply(routes[0].children, rolesRoutes)
+// 将权限路由添加到公共路由里某一个地方
+routes.push.apply(routes[0].children, rolesRoutes);
+
+//将权限路由添加到vuex里
+store.state.rolesRoutes = rolesRoutes;
 
 const router = new VueRouter({
   mode: 'history',
@@ -130,6 +137,7 @@ const router = new VueRouter({
 import { MessageBox } from 'element-ui'
 // 导航守卫 · 前
 router.beforeEach((to, from, next) => {
+  console.log(to);
 
   NProgress.start();// 开启网页加载进度条
 
@@ -158,31 +166,28 @@ router.beforeEach((to, from, next) => {
     return
   }
 
-  // 进行页面访问权限判断
+  // 进行页面访问权限判断，这个方法同时兼顾了切换页面形式和直接访问形式
   // 首页获取后端是否有当前页面的配置数据，从localStorage里获取，请在登录页面里的登录请求方法的回调里赋值
-  // 这里采用的是通过name验证
-  if (localStorage.getItem('routesRoles') != null) {// 如果已登录
-    let thisPageDta = JSON.parse(localStorage.getItem('routesRoles')).filter(item => item.pathName == to.name);// 获取后端的路由权限配置
-    if (thisPageDta.length != 0) {// 如果后端有该页面配置数据
-      let thisPageRoles = thisPageDta[0].roles;// 获取当前页面的权限,是个数组
-      let userRoles = JSON.parse(localStorage.getItem('userInfo')).roles;// 获取当前用户的权限标识
-      if (thisPageRoles.length != 0) {// 如果当前页面已设置权限
-        if (thisPageRoles.filter(item => item == userRoles).length == 0) {// 如果权限不匹配
-          store.state.roles = false;// 权限不足
-          MessageBox.alert('你无权访问当前页面！', '警告', {
-            confirmButtonText: '确定',
-            showClose: false,
-            closeOnClickModal: false,
-            callback: action => {
-              next(from.fullPath);// 访问上一页
-              NProgress.done();// 结束网页加载进度条
-            }
-          });
-          return
-        }
-      }
-    }
-  }
+  // 这里采用的是通过 name 验证 
+  store.state.rolesRoutes = JSON.parse(JSON.stringify(rolesRoutes));
+  if (localStorage.getItem('roles') != null) {// 如果已登录
+    let thisUserRoles = JSON.parse(localStorage.getItem('roles'));// 获取当前用户的权限配置
+    console.log(222, rolesRoutes);
+    if (rolesRoutes.filter(item => item.name == to.name) != 0) {// 如果当前页面属于权限路由
+      if (thisUserRoles.routes.filter(item => item == to.name).length == 0) {//如果当前页面用户无权限
+        MessageBox.alert('你无权访问当前页面！', '警告', {
+          confirmButtonText: '确定',
+          showClose: false,
+          closeOnClickModal: false,
+          callback: action => {
+            next(from.fullPath);// 访问上一页
+            NProgress.done();// 结束网页加载进度条
+          }
+        });
+        return
+      };
+    };
+  };
 
   // 设置网站标题
   document.title = to.meta.title + ' - ' + store.state.siteInfo.title;// 本地获取路由标题

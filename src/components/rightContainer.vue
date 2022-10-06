@@ -42,7 +42,7 @@
             </div>
 
             <!-- 路由标签 -->
-            <routeLabelVue />
+            <routeLabelVue class="" />
 
         </div>
 

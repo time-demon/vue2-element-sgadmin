@@ -12,6 +12,7 @@ export default new Vuex.Store({
     userInfo: {},
     routeLabel: [],// 路由标签
     roles: true,// 权限状态
+    rolesRoutes: [],//权限路由
   },
   getters: {
   },

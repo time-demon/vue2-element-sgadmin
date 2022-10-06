@@ -68,6 +68,7 @@ export default {
         }
     },
     mounted() {
+        localStorage.clear()
 
         // 监听视口尺寸
         this.innerWidth = window.innerWidth;
@@ -105,7 +106,7 @@ export default {
                     let userInfo = res.data;
                     userInfo.token = res.token;
                     localStorage.setItem("userInfo", JSON.stringify(userInfo));// 用户信息，包括token
-                    localStorage.setItem("routesRoles", JSON.stringify(res.routesRoles));// 路由权限
+                    localStorage.setItem("roles", JSON.stringify(res.roles));// 角色权限包，里面有该用户的权限数据
                     this.$message({
                         message: '登录成功，正在跳转...',
                         type: 'success',

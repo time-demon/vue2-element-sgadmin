@@ -19,12 +19,6 @@
   box-sizing: border-box;
 }
 
-// elementUI 样式重置
-
-
-
-// elementUI 样式重置
-
 // pc端class类
 @media screen and (min-width: 768px) {
   .pcHidden {

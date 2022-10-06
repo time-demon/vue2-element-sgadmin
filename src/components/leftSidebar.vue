@@ -12,10 +12,11 @@
         <!-- 最多三级 -->
         <div class="navbar">
             <!-- 第一级 -->
-            <div class="navbar-one-container" v-for="item in navData">
+            <div class="navbar-one-container" v-for="item in navData" v-if="item.hidden !=true">
                 <div :class="['navbar-one','/'+item.path == nowRoute?'nowRoute':''] " @click="navBigPath(item)"
                     :title="item.meta.title">
-                    <i :class="item.meta.icon"></i><span>{{item.meta.title}}</span>
+                    <p><i :class="item.meta.icon"></i><span>{{item.meta.title}}</span></p>
+                    <p class="el-icon-arrow-down" v-show="item.children != undefined"></p>
                 </div>
                 <!-- 第二级 -->
                 <div class="navbar-two-container" v-for="item2 in item.children" :style="'height:'+item.height">
@@ -70,7 +71,38 @@ export default {
         this.nowRoute = this.$route.fullPath;
 
         // 获取导航栏路由
-        let navData = this.$router.options.routes[0].children;
+        let navData = this.$router.options.routes[0].children;// 所有路由信息
+        // console.log('本地路由信息', navData);
+        let thisUserRoles = JSON.parse(localStorage.getItem('roles'));// 获取当前用户的权限配置
+        // console.log('后端获取的权限路由', thisUserRoles);
+        let thisPageName = this.$route.name;// 当前页面name
+        // console.log('当前页面name：', thisPageName);
+        let rolesRoutes = this.$store.state.rolesRoutes;
+        // console.log('权限路由', rolesRoutes);
+
+        // 第一级验证
+        for (let i = 0; i < navData.length; i++) {
+            for (let j = 0; j < rolesRoutes.length; j++) {
+                // 若 属于权限路由 且 该用户无该页面权限
+                if (navData[i].name == rolesRoutes[j].name && thisUserRoles.routes.filter(item => item == navData[i].name).length == 0) {
+                    navData[i].hidden = true;
+                };
+            };
+        };
+
+        // 第二级验证
+        for (let i = 0; i < navData.length; i++) {
+            // console.log(navData[i].children);
+            // for (let j = 0; j < rolesRoutes.length; j++) {
+            //     // 若 属于权限路由 且 
+            //     if (navData[i].name == rolesRoutes[j].name && thisUserRoles.routes.filter(item => item == navData[i].name).length == 0) {
+            //         console.log(99, navData[i].name, thisUserRoles.routes.filter(item => item == navData[i].name).length);
+            //         navData[i].hidden = true;
+            //     };
+            // };
+        };
+
+
         for (let i = 0; i < navData.length; i++) {
             navData[i].height = 0;// 一级导航的高
             if (navData[i].children != undefined) {
@@ -203,6 +235,10 @@ export default {
             }
 
             >.navbar-one {
+                display: flex;
+                vertical-align: top;
+                justify-content: space-between;
+                align-items: center;
                 height: 50px;
                 line-height: 50px;
                 color: #ddd;

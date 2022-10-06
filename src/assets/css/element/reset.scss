@@ -1,3 +1,26 @@
+// 移动端
+@media screen and (max-width: 768px) {
+
+    .el-dialog {
+        width: 90%;
+    }
+}
+
+// 下面的是移动端和pc端通用
+
+.el-dialog {
+    max-width: 450px;
+    margin: 0 !important;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.el-dialog__body {
+    max-height: 80vh;
+    overflow: auto;
+}
+
 .el-link {
     font-size: inherit;
 }
