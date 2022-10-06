@@ -8,7 +8,7 @@
                 <el-table :data="tableData" style="width: 100%" v-loading="loading" stripe ref="tabelForm">
                     <el-table-column type="selection" width="55" :selectable="selectDisableRoom">
                     </el-table-column>
-                    <el-table-column fixed prop="addTime(addTime)" label="添加时间" width="180">
+                    <el-table-column prop="addTime(addTime)" label="添加时间" width="180">
                         <template slot-scope="scope">
                             <i class="el-icon-time"></i>
                             <span style="margin-left: 10px">{{ addTime(scope.row.addTime)}}</span>
