@@ -1,12 +1,12 @@
 <template >
-    <el-dialog title="添加角色" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
+    <el-dialog :title="formSet.title" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
         <el-form :model="ruleForm" v-loading="loading" :rules="rules" ref="ruleForm" label-width="100px"
             class="demo-ruleForm">
             <el-form-item label="角色名称" prop="name">
                 <el-input v-model="ruleForm.name" placeholder="请输入角色名称"></el-input>
             </el-form-item>
             <el-form-item label="权限字符" prop="ident">
-                <el-input v-model="ruleForm.ident" placeholder="如：user1、user2"></el-input>
+                <el-input v-model="ruleForm.ident" placeholder="如：user1、user2" :disabled="disabled"></el-input>
             </el-form-item>
             <el-form-item label="菜单权限" prop="menuTreeData">
                 <el-tree node-key="fullPath" :data="menuTreeData" :props="props" show-checkbox ref="tree"></el-tree>
@@ -30,8 +30,11 @@ import dateTime from '@/tools/dateTime';
 export default {
     data() {
         return {
+            type: '', // 指定当前是添加还是修改
             loading: false,
             dialogFormVisible: false,
+            formSet: {
+            },
             ruleForm: {},
             rules: {
                 name: [
@@ -47,6 +50,7 @@ export default {
             },
             count: 1,
             menuTreeData: [],
+            disabled: false,
         }
     },
     mounted() {
@@ -93,60 +97,76 @@ export default {
             }
         },
 
-        // 打开添加角色弹窗表单
-        openRoleAdd() {
-            this.dialogFormVisible = true;
-            this.rolePopupReset();
-        },
-
-        // 打开修改角色弹窗表单
-        openRoleChange(row) {
-            console.log(row.menuTreeData);
-            for (let i = 0; i < row.menuTreeData.length; i++) {
-                console.log(row.menuTreeData[i].split('/'));
+        // 打开添加或编辑弹窗表单
+        openPopup(type, data) {
+            this.type = type;// 指定当前是添加还是修改
+            if (type == 'add') {
+                this.disabled = false;
+                this.formSet.title = '添加角色';
+            } else if (type == 'up') {
+                this.disabled = true;
+                for (let i = 0; i < data.menuTreeData.length; i++) {
+                    console.log(data.menuTreeData[i].split('/'));
+                }
             }
-
-            this.rolePopupReset(row);
             this.dialogFormVisible = true;
+            this.rolePopupReset(data);
         },
 
         // 提交
         submitForm(formName) {
             let _this = this;
             _this.loading = true;
-            // 循环添加菜单权限到ruleForm数据中
+
+            // 循环添加设置好的菜单权限到ruleForm数据中
             for (let i = 0; i < this.$refs.tree.getCheckedNodes(false, true).length; i++) {
                 this.ruleForm.menuTreeData.push(this.$refs.tree.getCheckedNodes(false, true)[i].fullPath);
             };
-            _this.ruleForm.addTime = dateTime().time;// 添加时间
+
             this.$refs[formName].validate((valid) => {
-                console.log(233);
-                this.$network({
-                    method: "POST",
-                    url: '/api/rolesAdd',
-                    data: _this.ruleForm
-                }).then(res => {
-                    console.log(2);
-                    console.log(res.code);
-                    if (res.code == 200) {
-                        _this.dialogFormVisible = false;
-                        this.$message({
-                            message: '成功添加',
-                            type: 'success'
-                        });
-                        _this.$parent.tableDataGet()
-                    } else if (res.code == -2) {
-                        console.log(222);
-                        this.$message({
-                            message: '已有该角色',
-                            type: 'error'
-                        });
-                    }
-                    _this.loading = false;
-                })
+                if (this.type == 'add') {
+                    _this.ruleForm.addTime = dateTime().time;// 添加时间
+                    this.$network({
+                        method: "POST",
+                        url: '/api/rolesAdd',
+                        data: _this.ruleForm
+                    }).then(res => {
+                        if (res.code == 200) {
+                            _this.dialogFormVisible = false;
+                            this.$message({
+                                message: '成功添加',
+                                type: 'success'
+                            });
+                            _this.$parent.tableDataGet();// 重载表格
+                        } else if (res.code == -2) {
+                            this.$message({
+                                message: '已有该角色',
+                                type: 'error'
+                            });
+                        }
+                        _this.loading = false;
+                    })
+                } else if (this.type == 'up') {
+                    this.$network({
+                        method: 'post',
+                        url: '/api/rolesUp',
+                        data: this.ruleForm
+                    }).then(res => {
+                        if (res.code == 200) {
+                            _this.dialogFormVisible = false;
+                        }
+                        _this.$parent.tableDataGet();// 重载表格
+                        _this.loading = false;
+                    })
+                }
+
             });
         }
 
     },
 }
 </script>
+
+<style lang="scss" scoped>
+
+</style>

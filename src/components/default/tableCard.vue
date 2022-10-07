@@ -1,4 +1,4 @@
-<!-- 卡片模板，这个有padding内边距，一般用于非表格 -->
+<!-- 表格卡片模板，这个没有padding内边距，一般用于内嵌表格 -->
 <template>
     <el-card class="box-card" :shadow="shadow">
         <div slot="header" class="clearfix" v-if="titleShow">
@@ -21,6 +21,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+::v-deep .el-card__body {
+    padding: 0;
+}
+
 .text {
     font-size: 14px;
 }
