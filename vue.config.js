@@ -23,7 +23,7 @@ module.exports = defineConfig({
         },
       },
       '/api': { // 自己的后端接口，表示若请求地址有 “/api” 时，触发此代理机制
-        target: 'https://api.timebk.cn/', // 代理地址，后端接口地址
+        target: 'https://vue2api.timebk.cn/', // 代理地址，后端接口地址
         // ws: true, // 是否开启实时通信
         changeOrigin: true, // 是否开启代理，在本地创建一个虚拟服务端
         pathRewrite: { // 重写路径
