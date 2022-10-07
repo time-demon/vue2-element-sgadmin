@@ -68,7 +68,6 @@ export default {
         }
     },
     mounted() {
-        localStorage.clear()
 
         // 监听视口尺寸
         this.innerWidth = window.innerWidth;
