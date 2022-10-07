@@ -26,8 +26,9 @@
                     </el-link>
                 </el-tag>
             </p>
-            <el-collapse v-model="activeNames">
-                <el-collapse-item v-for="(item,att) in Config" v-if="att=='dependencies'||att=='devDependencies'"
+            <el-collapse v-model="activeNames" v-loading='dependenciesLoading' style="min-height: 50px;">
+                <el-collapse-item v-for="(item,att) in Config"
+                    v-if="att=='dependencies'||att=='devDependencies' || att =='backendDevDependencies'"
                     :title="item.name" :name="item.name">
                     <el-row>
                         <el-col :span="12">
@@ -58,6 +59,7 @@ export default {
     components: { cardVue },
     data() {
         return {
+            dependenciesLoading: true,// 依赖盒子状态
             Config: {},// 获取到的配置
             activeNames: ['1'],
             newV: {
@@ -67,6 +69,7 @@ export default {
         }
     },
     mounted() {
+        // 获取版本
         this.$network({
             url: '/api/cloudGet'
         }).then(res => {
@@ -74,10 +77,29 @@ export default {
                 state: this.compareV(res.data[0].v, this.Config.version),
                 v: res.data[0].v
             };
+        });
+
+        // 或前端依赖和后端依赖
+        this.$network({
+            url: '/api/dependenciesGet'
+        }).then(res => {
+            if (res.code == 200) {
+                console.log(res);
+                this.dependenciesLoading = false;
+            }
+            this.Config = {
+                dependencies: Config.dependencies,
+                devDependencies: Config.devDependencies,
+                backendDevDependencies: res.dependencies,
+                author: Config.author,
+                version: Config.version,
+                github: Config.github
+            };
+            console.log(this.Config);
+            this.Config.dependencies.name = '环境依赖';
+            this.Config.devDependencies.name = '环境依赖(仅开发环境)';
+            this.Config.backendDevDependencies.name = '后端依赖';
         })
-        this.Config = { dependencies: Config.dependencies, devDependencies: Config.devDependencies, author: Config.author, version: Config.version, github: Config.github };
-        this.Config.dependencies.name = '环境依赖';
-        this.Config.devDependencies.name = '环境依赖(仅开发环境)';
     },
     methods: {
         // 比较版本
